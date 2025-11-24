@@ -1,0 +1,34 @@
+name: Update Market Data
+
+on:
+  schedule:
+    - cron: "0 21 * * *"   # 台灣時間每天早上 05:00
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install yfinance pandas
+
+      - name: Run update script
+        run: python update.py
+
+      - name: Commit and push
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "Auto update" || echo "No changes"
+          git push
