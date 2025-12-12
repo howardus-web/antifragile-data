@@ -13,7 +13,8 @@ tickers_tw = [
 
 tickers_us = [
     "QQQ","TLT","GLD","HGER","DBMF","CTA",
-    "BTAL","XLE","SPY","XLP","XLV","IEF"
+    "BTAL","XLE","SPY","XLP","XLV","IEF",
+    "ALLW"
 ]
 
 os.makedirs("tw", exist_ok=True)
