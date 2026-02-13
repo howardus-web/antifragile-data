@@ -1,36 +1,65 @@
 name: Build US Matrix
 
 on:
+  # C) 有資料更新才跑：只要 us/ 底下任何檔案變動就觸發
   push:
     paths:
-      - 'us/*.csv'
-      - 'build_matrix.py'
+      - "us/**"
+
+  # A) 保險：每天固定跑一次（cron 是 UTC；22:30 UTC = 台灣 06:30）
+  schedule:
+    - cron: "30 22 * * *"
+
+  # 手動按按鈕跑
   workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-us-matrix
+  cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Setup Python
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Install dependencies
         run: |
-          pip install pandas pyarrow
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; else pip install pandas pyarrow; fi
 
-      - name: Run build_matrix
-        run: python build_matrix.py
-
-      - name: Commit updated matrices
+      - name: Build matrix
         run: |
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
+          python build_matrix.py
+
+      # 重要：只把 matrices/ 的輸出推回 repo
+      # 並且 commit message 用 [skip ci] 避免 Actions 因為這個 commit 再自我觸發
+      - name: Commit and push matrices (if changed)
+        run: |
+          set -e
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
           git add matrices/
-          git commit -m "Auto rebuild matrix" || echo "No changes"
+
+          # 如果沒有任何變更，就乾淨退出
+          if git diff --cached --quiet; then
+            echo "No changes in matrices/ to commit."
+            exit 0
+          fi
+
+          git commit -m "Auto rebuild matrix [skip ci]"
           git push
+
