@@ -1,14 +1,11 @@
 name: Build US Matrix
 
 on:
-  # C) 有資料更新才跑：只要 us/ 底下任何檔案變動就觸發
-  push:
-    paths:
-      - "us/**"
-
-  # A) 保險：每天固定跑一次（cron 是 UTC；22:30 UTC = 台灣 06:30）
-  schedule:
-    - cron: "30 22 * * *"
+  # 方案 3：等 Update Market Data 跑完（且成功）才跑
+  workflow_run:
+    workflows: ["Update Market Data"]
+    types:
+      - completed
 
   # 手動按按鈕跑
   workflow_dispatch:
@@ -22,6 +19,8 @@ concurrency:
 
 jobs:
   build:
+    # 只在 update workflow 成功時才跑
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -38,14 +37,16 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; else pip install pandas pyarrow; fi
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          else
+            pip install pandas pyarrow
+          fi
 
       - name: Build matrix
         run: |
           python build_matrix.py
 
-      # 重要：只把 matrices/ 的輸出推回 repo
-      # 並且 commit message 用 [skip ci] 避免 Actions 因為這個 commit 再自我觸發
       - name: Commit and push matrices (if changed)
         run: |
           set -e
@@ -54,12 +55,11 @@ jobs:
 
           git add matrices/
 
-          # 如果沒有任何變更，就乾淨退出
           if git diff --cached --quiet; then
             echo "No changes in matrices/ to commit."
             exit 0
           fi
 
+          # 避免這個 commit 觸發其他 workflow（若你有 on: push）
           git commit -m "Auto rebuild matrix [skip ci]"
           git push
-
