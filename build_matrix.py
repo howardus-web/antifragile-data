@@ -10,13 +10,14 @@ import pandas as pd
 # ---------------------------
 PREFERRED_MASTER = ["QQQ", "SPY"]  # master calendar preference
 US_DIR = Path("us")               # repo structure: us/*.csv
-OUT_DIR = Path("matrices")
+OUT_DIR = Path("matrices/us")
 
-OUT_PRICES_PARQUET = OUT_DIR / "us_prices.parquet"
+OUT_PRICES_PARQUET = OUT_DIR / "prices.parquet"
 OUT_MONTH_ENDS_CSV = OUT_DIR / "calendar_month_ends.csv"
 OUT_HEALTH_CSV = OUT_DIR / "health_report.csv"
 OUT_SUMMARY_TXT = OUT_DIR / "summary.txt"
-OUT_MANIFEST_JSON = OUT_DIR / "manifest_us.json"
+OUT_MANIFEST_JSON = OUT_DIR / "manifest.json"
+
 # ---------------------------
 
 
