@@ -1,13 +1,13 @@
 name: Build US Matrix
 
 on:
-  # 方案 3：等 Update Market Data 跑完（且成功）才跑
+  # 方案3：等 update-data 跑完（raw data 更新後）再接著跑
   workflow_run:
     workflows: ["Update Market Data"]
     types:
       - completed
 
-  # 手動按按鈕跑
+  # 允許手動觸發
   workflow_dispatch:
 
 permissions:
@@ -18,16 +18,59 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
-    # 只在 update workflow 成功時才跑
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+  build-us:
+    # 只在 update-data 成功時才跑（手動 workflow_dispatch 不受此限制）
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
+
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      # ====== 關鍵：判斷這次 update 是否真的動到 us/ ======
+      - name: Detect changes in us/
+        id: us_changes
+        shell: bash
+        run: |
+          set -e
+
+          # workflow_dispatch：沒有對應的 upstream commit，直接視為需要跑
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # workflow_run：抓到 update-data 觸發的那個 commit SHA
+          SHA="${{ github.event.workflow_run.head_sha }}"
+          echo "Upstream head_sha: $SHA"
+
+          # 取該 commit 的上一個 commit（若取不到就直接跑）
+          PARENT=$(git rev-parse "${SHA}^" 2>/dev/null || true)
+          if [ -z "$PARENT" ]; then
+            echo "No parent commit found; assume changed=true"
+            echo "changed=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          echo "Diff range: $PARENT..$SHA"
+          if git diff --name-only "$PARENT" "$SHA" | grep -qE '^us/'; then
+            echo "US data changed."
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "No changes in us/."
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Stop if no us/ changes
+        if: steps.us_changes.outputs.changed != 'true'
+        run: |
+          echo "Skip: us/ not changed in latest update."
+          exit 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -35,6 +78,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
+        shell: bash
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then
@@ -43,11 +87,13 @@ jobs:
             pip install pandas pyarrow
           fi
 
-      - name: Build matrix
+      - name: Build US matrix
         run: |
           python build_matrix.py
 
+      # 只提交 matrices/（你目前 US matrix 產物都在這）
       - name: Commit and push matrices (if changed)
+        shell: bash
         run: |
           set -e
           git config user.name "github-actions[bot]"
@@ -60,6 +106,5 @@ jobs:
             exit 0
           fi
 
-          # 避免這個 commit 觸發其他 workflow（若你有 on: push）
-          git commit -m "Auto rebuild matrix [skip ci]"
+          git commit -m "Auto rebuild US matrix [skip ci]"
           git push
