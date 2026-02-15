@@ -21,10 +21,10 @@ Per-ticker MaxDate lag to master max (days) [larger = more stale]:
 - QQQ: 0
 - SPY: 0
 - TLT: 0
-- TWD=X: 0
 - XLE: 0
 - XLP: 0
 - XLV: 0
+- TWD=X: -2
 
 Top missing ratios in FULL matrix (often just late inception):
 - ALLW: 96.377%
