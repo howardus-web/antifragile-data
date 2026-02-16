@@ -1,25 +1,30 @@
-import argparse
 import json
 import hashlib
+import argparse
 from pathlib import Path
 
 import pandas as pd
 
 
 # ---------------------------
-# Config (market-specific)
+# Config (repo layout)
 # ---------------------------
+
 MARKETS = {
+    # US ETFs / assets
     "us": {
         "in_dir": Path("us"),
         "out_dir": Path("matrices/us"),
         "preferred_master": ["QQQ", "SPY"],
+        "scope": "US_FULL_MATRIX",
     },
+    # Taiwan equities / ETFs
     "tw": {
         "in_dir": Path("tw"),
         "out_dir": Path("matrices/tw"),
-        # TW master calendar preference: broad market proxy first
+        # Prefer broad index proxies if present; fall back to deterministic alpha order
         "preferred_master": ["0050.TW", "0055.TW", "2330.TW"],
+        "scope": "TW_FULL_MATRIX",
     },
 }
 
@@ -30,6 +35,7 @@ OUT_FILES = {
     "summary": "summary.txt",
     "manifest": "manifest.json",
 }
+
 # ---------------------------
 
 
@@ -41,25 +47,29 @@ def sha256_file(p: Path) -> str:
     return h.hexdigest()
 
 
-def clean_single_csv_fixed_format(path: Path) -> pd.Series:
+def clean_single_csv_generic(path: Path) -> pd.Series:
     """
-    Fixed CSV format (your long-term contract):
-    - first 3 rows are junk header (Price/Ticker/Date)
+    Generic fixed format (both us/ and tw/ currently match this):
+    - first 3 rows are junk header: Price/Ticker/Date
     - real data starts from row 4
     - columns: Date, AdjClose
-    - Date format: YYYY/M/D (may not be zero-padded)
+    - Date format: ISO (YYYY-MM-DD) OR YYYY/M/D (may not be zero-padded)
+    Deterministic guards:
+    - normalize date
+    - sort by date
+    - drop duplicates keep last
     """
     df = pd.read_csv(path, skiprows=3, header=None, names=["Date", "AdjClose"])
+
+    # Robust date parsing: supports YYYY-MM-DD and YYYY/M/D
     df["Date"] = pd.to_datetime(df["Date"], errors="raise").dt.normalize()
 
-    # Sort + deterministic de-dup
     df = df.sort_values("Date")
     df = df.drop_duplicates("Date", keep="last")
 
     df["AdjClose"] = pd.to_numeric(df["AdjClose"], errors="raise")
 
     s = df.set_index("Date")["AdjClose"]
-    # Keep stem as-is (e.g., 0050.TW); uppercase for consistency
     s.name = path.stem.upper()
     return s
 
@@ -76,15 +86,14 @@ def write_text(path: Path, text: str) -> None:
 
 
 def build_market(market: str) -> None:
-    if market not in MARKETS:
-        raise ValueError(f"未知 market: {market}. 可用: {sorted(MARKETS.keys())}")
-
-    in_dir: Path = MARKETS[market]["in_dir"]
-    out_dir: Path = MARKETS[market]["out_dir"]
-    preferred_master: list[str] = MARKETS[market]["preferred_master"]
+    cfg = MARKETS[market]
+    in_dir: Path = cfg["in_dir"]
+    out_dir: Path = cfg["out_dir"]
+    preferred_master: list[str] = cfg["preferred_master"]
+    scope: str = cfg["scope"]
 
     if not in_dir.exists():
-        raise FileNotFoundError(f"找不到資料夾：{in_dir}（repo 根目錄應該要有 {in_dir}/）")
+        raise FileNotFoundError(f"找不到資料夾：{in_dir}（repo 根目錄應該要有 {market}/）")
 
     csv_files = sorted([p for p in in_dir.glob("*.csv") if p.is_file()])
     if not csv_files:
@@ -93,10 +102,9 @@ def build_market(market: str) -> None:
     # Load series
     series_map: dict[str, pd.Series] = {}
     file_meta: dict[str, dict] = {}
-
     for p in csv_files:
         t = p.stem.upper()
-        s = clean_single_csv_fixed_format(p)
+        s = clean_single_csv_generic(p)
         series_map[t] = s
         file_meta[t] = {
             "file": str(p.as_posix()),
@@ -136,29 +144,37 @@ def build_market(market: str) -> None:
     month_end_dates["MonthEndDate"] = month_end_dates["MonthEndDate"].dt.strftime("%Y-%m-%d")
     month_end_dates.to_csv(out_month_ends, index=False, encoding="utf-8-sig")
 
-    # Health report
+    # Health report (human-readable, Excel-friendly)
     master_max = master_dates.max().date()
     rows = []
     for t in tickers:
         s = series_map[t]
-        rows.append({
-            "Ticker": t,
-            "MinDate": str(s.index.min().date()),
-            "MaxDate": str(s.index.max().date()),
-            "Rows": int(s.shape[0]),
-            "LagToMasterMax_Days": int((master_max - s.index.max().date()).days),
-        })
-    health = pd.DataFrame(rows).sort_values(["LagToMasterMax_Days", "Ticker"], ascending=[False, True])
+        rows.append(
+            {
+                "Ticker": t,
+                "MinDate": str(s.index.min().date()),
+                "MaxDate": str(s.index.max().date()),
+                "Rows": int(s.shape[0]),
+                "LagToMasterMax_Days": int((master_max - s.index.max().date()).days),
+            }
+        )
+    health = pd.DataFrame(rows).sort_values(
+        ["LagToMasterMax_Days", "Ticker"], ascending=[False, True]
+    )
 
-    # Missing stats on the FULL matrix
+    # Missing stats on the FULL matrix (informational; not treated as error)
     missing_counts = df.isna().sum().astype(int)
     health["MissingInFullMatrix"] = health["Ticker"].map(missing_counts.to_dict()).astype(int)
-    health["MissingPctInFullMatrix"] = (health["MissingInFullMatrix"] / len(master_dates) * 100.0).round(3)
+    health["MissingPctInFullMatrix"] = (
+        health["MissingInFullMatrix"] / len(master_dates) * 100.0
+    ).round(3)
+
     health.to_csv(out_health, index=False, encoding="utf-8-sig")
 
-    # Manifest
+    # Manifest (machine-readable)
     manifest = {
-        "scope": f"{market.upper()}_FULL_MATRIX",
+        "scope": scope,
+        "market": market,
         "in_dir": str(in_dir.as_posix()),
         "master_ticker": master,
         "master_min_date": str(master_dates.min().date()),
@@ -177,12 +193,14 @@ def build_market(market: str) -> None:
             "path": str(out_month_ends.as_posix()),
             "months": int(month_end_dates.shape[0]),
         },
-        "health_report": {"path": str(out_health.as_posix())},
+        "health_report": {
+            "path": str(out_health.as_posix()),
+        },
         "files": file_meta,
     }
     out_manifest.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
 
-    # Summary
+    # Summary (the one you actually look at)
     nan_cells = int(df.isna().sum().sum())
     summary = []
     summary.append(f"Data Layer Summary (FULL matrix) — {market.upper()}\n")
@@ -193,14 +211,20 @@ def build_market(market: str) -> None:
     summary.append(f"Master max date : {master_dates.max().date()}\n")
     summary.append(f"Matrix shape    : {df.shape[0]} x {df.shape[1]}\n")
     summary.append(f"NaN cells (info): {nan_cells}\n")
-    summary.append("\nNOTE: NaN here is often normal (different tickers start dates). "
+    summary.append("\nNOTE: NaN here is often normal (different start dates). "
                    "Backtest layer should decide the valid common-start window.\n\n")
     summary.append("Per-ticker MaxDate lag to master max (days) [larger = more stale]:\n")
-    lag_sorted = health[["Ticker", "LagToMasterMax_Days"]].sort_values("LagToMasterMax_Days", ascending=False)
+    lag_sorted = health[["Ticker", "LagToMasterMax_Days"]].sort_values(
+        "LagToMasterMax_Days", ascending=False
+    )
     for _, r in lag_sorted.iterrows():
         summary.append(f"- {r['Ticker']}: {int(r['LagToMasterMax_Days'])}\n")
     summary.append("\nTop missing ratios in FULL matrix (often just late inception):\n")
-    miss_sorted = health[["Ticker", "MissingPctInFullMatrix"]].sort_values("MissingPctInFullMatrix", ascending=False).head(8)
+    miss_sorted = (
+        health[["Ticker", "MissingPctInFullMatrix"]]
+        .sort_values("MissingPctInFullMatrix", ascending=False)
+        .head(8)
+    )
     for _, r in miss_sorted.iterrows():
         summary.append(f"- {r['Ticker']}: {float(r['MissingPctInFullMatrix'])}%\n")
 
@@ -212,19 +236,31 @@ def build_market(market: str) -> None:
     print(f" - {out_health}")
     print(f" - {out_summary}")
     print(f" - {out_manifest}")
-    print(f"Master = {master}, days = {len(master_dates)}, shape = {df.shape[0]} x {df.shape[1]}, NaN cells = {nan_cells}")
+    print(
+        f"Master = {master}, days = {len(master_dates)}, "
+        f"shape = {df.shape[0]} x {df.shape[1]}, NaN cells = {nan_cells}"
+    )
+
+
+def parse_args() -> argparse.Namespace:
+    p = argparse.ArgumentParser(description="Build price matrices for antifragile-data repo.")
+    p.add_argument(
+        "--market",
+        choices=["all"] + sorted(MARKETS.keys()),
+        default="all",
+        help="Build one market only (us/tw). Default builds both.",
+    )
+    return p.parse_args()
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Build FULL price matrices (US/TW) into matrices/<market>/")
-    parser.add_argument("--market", choices=sorted(MARKETS.keys()), help="Only build a single market (default: build all).")
-    args = parser.parse_args()
-
-    if args.market:
-        build_market(args.market)
+    args = parse_args()
+    if args.market == "all":
+        for m in ["us", "tw"]:
+            if m in MARKETS:
+                build_market(m)
     else:
-        for m in sorted(MARKETS.keys()):
-            build_market(m)
+        build_market(args.market)
 
 
 if __name__ == "__main__":
