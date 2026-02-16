@@ -1,0 +1,36 @@
+{
+  "universe_name": "TW_Electronics_Top20",
+  "version": "v1_rotation",
+  "effective_date": "2026-02-28",
+  "based_on_snapshot": "2025-08-31",
+  "update_frequency_months": 6,
+  "lag_months": 6,
+  "exclusions": [
+    "2412.TW",
+    "3045.TW",
+    "4904.TW"
+  ],
+  "tickers": [
+    "2330.TW",
+    "2317.TW",
+    "2454.TW",
+    "2308.TW",
+    "2382.TW",
+    "3711.TW",
+    "2345.TW",
+    "6669.TW",
+    "2303.TW",
+    "2357.TW",
+    "2383.TW",
+    "3017.TW",
+    "3231.TW",
+    "3653.TW",
+    "3008.TW",
+    "3661.TW",
+    "2395.TW",
+    "2301.TW",
+    "2059.TW",
+    "2327.TW"
+  ],
+  "notes": "First deterministic rotation snapshot (6M frequency, 6M lag) starting 2026-02 month-end."
+}

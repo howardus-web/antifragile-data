@@ -8,7 +8,7 @@ Master max date : 2026-02-11
 Matrix shape    : 4192 x 23
 NaN cells (info): 2210
 
-NOTE: NaN here is often normal (different tickers start dates). Backtest layer should decide the valid common-start window.
+NOTE: NaN here is often normal (different start dates). Backtest layer should decide the valid common-start window.
 
 Per-ticker MaxDate lag to master max (days) [larger = more stale]:
 - 0050.TW: 0

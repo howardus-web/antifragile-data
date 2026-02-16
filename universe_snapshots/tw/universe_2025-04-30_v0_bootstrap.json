@@ -1,0 +1,36 @@
+{
+  "universe_name": "TW_Electronics_Top20",
+  "version": "v0_bootstrap",
+  "effective_date": "2025-04-30",
+  "based_on_snapshot": null,
+  "update_frequency_months": 6,
+  "lag_months": 6,
+  "exclusions": [
+    "2412.TW",
+    "3045.TW",
+    "4904.TW"
+  ],
+  "tickers": [
+    "2301.TW",
+    "2303.TW",
+    "2308.TW",
+    "2317.TW",
+    "2327.TW",
+    "2330.TW",
+    "2345.TW",
+    "2357.TW",
+    "2379.TW",
+    "2382.TW",
+    "2383.TW",
+    "2395.TW",
+    "2454.TW",
+    "3008.TW",
+    "3017.TW",
+    "3034.TW",
+    "3231.TW",
+    "3711.TW",
+    "4938.TW",
+    "6669.TW"
+  ],
+  "notes": "Bootstrap universe used since strategy launch (2025-04). Not produced via the 6M-lag rotation rule."
+}
