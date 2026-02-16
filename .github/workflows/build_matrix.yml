@@ -1,7 +1,7 @@
-name: Build US Matrix
+name: Build Matrices (US+TW)
 
 on:
-  # 方案3：等 update-data 跑完（raw data 更新後）再接著跑
+  # 等 update-data 跑完（raw data 更新後）再接著跑
   workflow_run:
     workflows: ["Update Market Data"]
     types:
@@ -14,11 +14,11 @@ permissions:
   contents: write
 
 concurrency:
-  group: build-us-matrix
+  group: build-matrices
   cancel-in-progress: true
 
 jobs:
-  build-us:
+  build-matrices:
     # 只在 update-data 成功時才跑（手動 workflow_dispatch 不受此限制）
     if: >
       github.event_name == 'workflow_dispatch' ||
@@ -32,16 +32,17 @@ jobs:
         with:
           fetch-depth: 0
 
-      # ====== 關鍵：判斷這次 update 是否真的動到 us/ ======
-      - name: Detect changes in us/
-        id: us_changes
+      # ====== 關鍵：判斷這次 update 是否真的動到 us/ 或 tw/ ======
+      - name: Detect changes in us/ and tw/
+        id: changes
         shell: bash
         run: |
           set -e
 
-          # workflow_dispatch：沒有對應的 upstream commit，直接視為需要跑
+          # workflow_dispatch：沒有 upstream commit，直接視為兩邊都需要跑
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "us_changed=true" >> $GITHUB_OUTPUT
+            echo "tw_changed=true" >> $GITHUB_OUTPUT
             exit 0
           fi
 
@@ -52,24 +53,35 @@ jobs:
           # 取該 commit 的上一個 commit（若取不到就直接跑）
           PARENT=$(git rev-parse "${SHA}^" 2>/dev/null || true)
           if [ -z "$PARENT" ]; then
-            echo "No parent commit found; assume changed=true"
-            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "No parent commit found; assume both changed=true"
+            echo "us_changed=true" >> $GITHUB_OUTPUT
+            echo "tw_changed=true" >> $GITHUB_OUTPUT
             exit 0
           fi
 
           echo "Diff range: $PARENT..$SHA"
-          if git diff --name-only "$PARENT" "$SHA" | grep -qE '^us/'; then
+          CHANGED_FILES=$(git diff --name-only "$PARENT" "$SHA" || true)
+
+          if echo "$CHANGED_FILES" | grep -qE '^us/'; then
             echo "US data changed."
-            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "us_changed=true" >> $GITHUB_OUTPUT
           else
             echo "No changes in us/."
-            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "us_changed=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Stop if no us/ changes
-        if: steps.us_changes.outputs.changed != 'true'
+          if echo "$CHANGED_FILES" | grep -qE '^tw/'; then
+            echo "TW data changed."
+            echo "tw_changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "No changes in tw/."
+            echo "tw_changed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Stop if no us/ or tw/ changes
+        if: steps.changes.outputs.us_changed != 'true' && steps.changes.outputs.tw_changed != 'true'
         run: |
-          echo "Skip: us/ not changed in latest update."
+          echo "Skip: neither us/ nor tw/ changed in latest update."
           exit 0
 
       - name: Set up Python
@@ -87,11 +99,19 @@ jobs:
             pip install pandas pyarrow
           fi
 
+      # ---- Build US (only if us/ changed or manual trigger) ----
       - name: Build US matrix
+        if: steps.changes.outputs.us_changed == 'true'
         run: |
-          python build_matrix.py
+          python build_matrix.py --market us
 
-      # 只提交 matrices/（你目前 US matrix 產物都在這）
+      # ---- Build TW (only if tw/ changed or manual trigger) ----
+      - name: Build TW matrix
+        if: steps.changes.outputs.tw_changed == 'true'
+        run: |
+          python build_matrix.py --market tw
+
+      # 只提交 matrices/us 與 matrices/tw（依實際有跑的部份 add）
       - name: Commit and push matrices (if changed)
         shell: bash
         run: |
@@ -99,12 +119,13 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          git add matrices/us/
+          # 只 add 兩個輸出資料夾（就算其中一個沒變也無妨）
+          git add matrices/us/ matrices/tw/
 
           if git diff --cached --quiet; then
             echo "No changes in matrices/ to commit."
             exit 0
           fi
 
-          git commit -m "Auto rebuild US matrix [skip ci]"
+          git commit -m "Auto rebuild matrices (US+TW) [skip ci]"
           git push
