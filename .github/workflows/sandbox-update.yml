@@ -1,0 +1,49 @@
+name: Update Sandbox Data
+
+on:
+  # 手動觸發
+  workflow_dispatch:
+
+  # 獨立排程：每週一台灣時間早上 06:00（UTC 22:00 週日）
+  # 實驗性標的不需要每天更新，週頻就夠
+  schedule:
+    - cron: "0 22 * * 0"
+
+# 明確只寫 sandbox/，不碰 us/ tw/ matrices/
+permissions:
+  contents: write
+
+concurrency:
+  group: sandbox-update
+  cancel-in-progress: true
+
+jobs:
+  update-sandbox:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install yfinance pandas
+
+      - name: Run sandbox update
+        run: python sandbox_update.py
+
+      - name: Commit and push sandbox/
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add sandbox/
+          if git diff --cached --quiet; then
+            echo "No changes in sandbox/ to commit."
+            exit 0
+          fi
+          git commit -m "Auto update sandbox/ [skip ci]"
+          git push
