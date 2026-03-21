@@ -17,7 +17,7 @@ import yfinance as yf
 # ── 實驗性標的清單（自由新增）──────────────────────────────
 TICKERS = [
    
-    "IEFM",  
+    "PHO",  
     
 
     
