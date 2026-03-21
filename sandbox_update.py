@@ -16,24 +16,15 @@ import yfinance as yf
 
 # ── 實驗性標的清單（自由新增）──────────────────────────────
 TICKERS = [
-    # Managed Futures
-    "AQMIX",   # AQR Managed Futures
+   
+    "SPLV",  
+    "SPMO",     
+    "JVAL",      
+    "VFQY",      
+    "QUAL",  
+    "SIZE",
 
-    # 區域 ETF
-    "EWY",     # iShares MSCI South Korea
-    "EEM",     # iShares MSCI Emerging Markets
-    "EWZ",     # iShares MSCI Brazil
-    "VGK",     # Vanguard FTSE Europe
-
-    # 主題 / 特殊
-    "ITA",     # iShares U.S. Aerospace & Defense
-    "ICVT",    # iShares Convertible Bond
-
-    # 另類資產
-    "GBTC",    # Grayscale Bitcoin Trust
-
-    # 收益型
-    "JEPI",    # JPMorgan Equity Premium Income
+    
 ]
 # ──────────────────────────────────────────────────────────
 
