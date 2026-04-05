@@ -1,5 +1,4 @@
-
-import yfinance as yf
+ import yfinance as yf
 import pandas as pd
 import os
 
@@ -14,8 +13,16 @@ tickers_tw = [
 tickers_us = [
     "QQQ","TLT","GLD","HGER","DBMF","CTA",
     "BTAL","XLE","SPY","XLP","XLV","IEF",
-    "ALLW","BRK-B","TWD=X"
+    "ALLW","BRK-B","TWD=X",
+    "CSNDX.SW","IGLN.L","IUES.L"
 ]
+
+# yfinance 需要交易所後綴才能下載，但存檔時去掉，讓 PnL engine 找得到
+yf_rename = {
+    "CSNDX.SW": "CSNDX",
+    "IGLN.L":   "IGLN",
+    "IUES.L":   "IUES",
+}
 
 os.makedirs("tw", exist_ok=True)
 os.makedirs("us", exist_ok=True)
@@ -30,9 +37,9 @@ def download_adj_close(ticker, folder):
 
     df = df[["Close"]]            # auto_adjust=True → Close = Adjusted Close
     df.rename(columns={"Close": "AdjClose"}, inplace=True)
-
-    df.to_csv(f"{folder}/{ticker}.csv")
-    print("Saved:", folder, ticker)
+    save_name = yf_rename.get(ticker, ticker)
+    df.to_csv(f"{folder}/{save_name}.csv")
+    print("Saved:", folder, save_name)
 
 for t in tickers_tw:
     download_adj_close(t, "tw")
