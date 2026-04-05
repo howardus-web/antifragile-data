@@ -7,7 +7,8 @@ tickers_tw = [
     "2330.TW","2345.TW","2357.TW","2382.TW","2383.TW",
     "3017.TW","3231.TW","3711.TW","6669.TW","2379.TW",
     "2395.TW","2454.TW","3008.TW","3034.TW","4938.TW",
-    "2059.TW","3653.TW","3661.TW","0050.TW","0053.TW","0055.TW"
+    "2059.TW","3653.TW","3661.TW","0050.TW","0053.TW","0055.TW",
+    "00679B.TW"
 ]
 
 tickers_us = [
@@ -17,11 +18,12 @@ tickers_us = [
     "CSNDX.SW","IGLN.L","IUES.L"
 ]
 
-# yfinance 需要交易所後綴才能下載，但存檔時去掉，讓 PnL engine 找得到
+# yfinance 需要交易所後綴才能下載，但存檔時統一格式，讓 PnL engine 找得到
 yf_rename = {
-    "CSNDX.SW": "CSNDX",
-    "IGLN.L":   "IGLN",
-    "IUES.L":   "IUES",
+    "CSNDX.SW":  "CSNDX",
+    "IGLN.L":    "IGLN",
+    "IUES.L":    "IUES",
+    "00679B.TWO": "00679B.TW",
 }
 
 os.makedirs("tw", exist_ok=True)
