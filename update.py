@@ -15,7 +15,7 @@ tickers_us = [
     "QQQ","TLT","GLD","HGER","DBMF","CTA",
     "BTAL","XLE","SPY","XLP","XLV","IEF",
     "ALLW","BRK-B","TWD=X",
-    "CSNDX.SW","IGLN.L","IUES.L"
+    "CSNDX.SW","IGLN.L","IUES.L","DTLA.L"
 ]
 
 # yfinance 需要交易所後綴才能下載，但存檔時統一格式，讓 PnL engine 找得到
@@ -23,6 +23,7 @@ yf_rename = {
     "CSNDX.SW":  "CSNDX",
     "IGLN.L":    "IGLN",
     "IUES.L":    "IUES",
+    "DTLA.L":    "DTLA",
     "00679B.TWO": "00679B.TW",
 }
 
@@ -32,11 +33,9 @@ os.makedirs("us", exist_ok=True)
 def download_adj_close(ticker, folder):
     print("Downloading", ticker)
     df = yf.download(ticker, start="2000-01-01", auto_adjust=True)
-
     if df.empty:
         print("⚠ No data:", ticker)
         return
-
     df = df[["Close"]]            # auto_adjust=True → Close = Adjusted Close
     df.rename(columns={"Close": "AdjClose"}, inplace=True)
     save_name = yf_rename.get(ticker, ticker)
@@ -45,6 +44,5 @@ def download_adj_close(ticker, folder):
 
 for t in tickers_tw:
     download_adj_close(t, "tw")
-
 for t in tickers_us:
     download_adj_close(t, "us")
