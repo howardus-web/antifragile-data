@@ -6,7 +6,7 @@ Trading days    : 6641
 Master min date : 2000-01-03
 Master max date : 2026-05-29
 Matrix shape    : 6641 x 19
-NaN cells (info): 43531
+NaN cells (info): 43530
 
 NOTE: NaN here is often normal (different start dates). Backtest layer should decide the valid common-start window.
 
