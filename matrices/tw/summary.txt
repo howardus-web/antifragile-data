@@ -6,7 +6,7 @@ Trading days    : 4268
 Master min date : 2009-01-02
 Master max date : 2026-06-12
 Matrix shape    : 4268 x 26
-NaN cells (info): 3367
+NaN cells (info): 3364
 
 NOTE: NaN here is often normal (different start dates). Backtest layer should decide the valid common-start window.
 
@@ -43,7 +43,7 @@ Top missing ratios in FULL matrix (often just late inception):
 - 3661.TW: 21.907%
 - 3653.TW: 5.108%
 - 4938.TW: 0.164%
-- 2301.TW: 0.023%
 - 2303.TW: 0.023%
-- 0055.TW: 0.023%
-- 2059.TW: 0.023%
+- 2308.TW: 0.023%
+- 2327.TW: 0.023%
+- 2317.TW: 0.023%
