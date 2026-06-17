@@ -4,8 +4,8 @@
   "in_dir": "us",
   "master_ticker": "QQQ",
   "master_min_date": "2000-01-03",
-  "master_max_date": "2026-06-16",
-  "master_trading_days": 6653,
+  "master_max_date": "2026-06-17",
+  "master_trading_days": 6654,
   "tickers": [
     "ALLW",
     "BRK-B",
@@ -29,10 +29,10 @@
   ],
   "matrix": {
     "path": "matrices/us/prices.parquet",
-    "rows": 6653,
+    "rows": 6654,
     "cols": 19,
     "min_date": "2000-01-03",
-    "max_date": "2026-06-16",
+    "max_date": "2026-06-17",
     "nan_cells": 43531
   },
   "month_ends": {
@@ -45,136 +45,136 @@
   "files": {
     "ALLW": {
       "file": "us/ALLW.csv",
-      "sha256": "046b3456d5ebdefcf64486cec17d5a5b2052eb637a992e06e03d446a0f3a03b3",
-      "rows": 322,
+      "sha256": "24f50c4571a71aa1fed6a7d93805109d9d9aba06e18470b315787e6fde5fbcb8",
+      "rows": 323,
       "min_date": "2025-03-06",
-      "max_date": "2026-06-16"
+      "max_date": "2026-06-17"
     },
     "BRK-B": {
       "file": "us/BRK-B.csv",
-      "sha256": "4b6bed8fd4b63371808e9ff8e9e31ad9d530bff05b618c56c11956ccdbba63d0",
-      "rows": 6653,
+      "sha256": "2b4a3a47ba3b2eb799c82b211fe2679c3ec8cd204e4527a55a1a6346aa754fde",
+      "rows": 6654,
       "min_date": "2000-01-03",
-      "max_date": "2026-06-16"
+      "max_date": "2026-06-17"
     },
     "BTAL": {
       "file": "us/BTAL.csv",
-      "sha256": "a3c1ddfb377645e49f11c98299ede0fc8252660117775625bf18db1989767f04",
-      "rows": 3711,
+      "sha256": "f0a3da1c703aecf47613eabdd8eb2503a8f8a706b836c101ccd6442c7b8ba43b",
+      "rows": 3712,
       "min_date": "2011-09-13",
-      "max_date": "2026-06-16"
+      "max_date": "2026-06-17"
     },
     "CSNDX": {
       "file": "us/CSNDX.csv",
-      "sha256": "b4a515e7a0797a7520806e9f90455707be3b4c32cbb8da89cfb1c0ba50d16e1b",
-      "rows": 4112,
+      "sha256": "87f3ff3423b7c4f95423dda968bf2d84a013b7f59a7c845942246112613da56f",
+      "rows": 4113,
       "min_date": "2010-01-26",
-      "max_date": "2026-06-16"
+      "max_date": "2026-06-17"
     },
     "CTA": {
       "file": "us/CTA.csv",
-      "sha256": "af67b0534daccad240067a8b56b9f5cbaec12f126ebd95c1250600ab86296d62",
-      "rows": 1073,
+      "sha256": "8a448d1cdba660b9d0d90ecbdd63a174a3e5814357cc43cbafac5a6ae1cbc38c",
+      "rows": 1074,
       "min_date": "2022-03-08",
-      "max_date": "2026-06-16"
+      "max_date": "2026-06-17"
     },
     "DBMF": {
       "file": "us/DBMF.csv",
-      "sha256": "1705b5c6805772c1e589cd9d7d07a3d4cf5a65c2dce8ec726a5d7b330090d2b4",
-      "rows": 1787,
+      "sha256": "f02597e101eb36f6637ba22018c90219a268516c4863529c53e5044dd4e52cef",
+      "rows": 1788,
       "min_date": "2019-05-08",
-      "max_date": "2026-06-16"
+      "max_date": "2026-06-17"
     },
     "DTLA": {
       "file": "us/DTLA.csv",
-      "sha256": "2777c875e6aaae382d898577e42ec44f74b560c5b0bdc8a61250645e2afb93a3",
-      "rows": 2046,
+      "sha256": "9e31546f57b62504582580bb1ccb520f9782f8f4e186d50b661e53202f61f48c",
+      "rows": 2047,
       "min_date": "2018-05-10",
-      "max_date": "2026-06-16"
+      "max_date": "2026-06-17"
     },
     "GLD": {
       "file": "us/GLD.csv",
-      "sha256": "1f7e046c52eb1185e4c88c7331428b2c9fb186aa0bf92318ae6ef334331c42f5",
-      "rows": 5427,
+      "sha256": "29197610546e88fb3d35a6ad8226d63a0bc9a59ff55d3edaebf9d17b81a32baf",
+      "rows": 5428,
       "min_date": "2004-11-18",
-      "max_date": "2026-06-16"
+      "max_date": "2026-06-17"
     },
     "HGER": {
       "file": "us/HGER.csv",
-      "sha256": "f79971a5e5cedcb08d21e7c341451b2b5b830d5ed7e6fe3e764b99545b1db1e5",
-      "rows": 1090,
+      "sha256": "01ae2a6eac9ea9d39dc455a2b31a2309522235d62af8d4742846e6da6e9717f6",
+      "rows": 1091,
       "min_date": "2022-02-10",
-      "max_date": "2026-06-16"
+      "max_date": "2026-06-17"
     },
     "IEF": {
       "file": "us/IEF.csv",
-      "sha256": "3890ada8250b4be20ed939dd864515a2f88c034b6e126cc1def3700ee19358f6",
-      "rows": 6009,
+      "sha256": "d2c13d5ed35776826540df814c8e8d6f9625171466a3f282ff386df3eb2adc89",
+      "rows": 6010,
       "min_date": "2002-07-30",
-      "max_date": "2026-06-16"
+      "max_date": "2026-06-17"
     },
     "IGLN": {
       "file": "us/IGLN.csv",
-      "sha256": "12d8eea698831c6af020f8b0e0789cf95927cb35f05ac40cdd482ec7d85781ec",
-      "rows": 3834,
+      "sha256": "61c688e0eff269f61b13e317618764dcf59af397dab1ded88222e6cedef44d98",
+      "rows": 3835,
       "min_date": "2011-04-08",
-      "max_date": "2026-06-16"
+      "max_date": "2026-06-17"
     },
     "IUES": {
       "file": "us/IUES.csv",
-      "sha256": "d54790fc1607a4c9b71cf5800dfc1436f8a8c9735a226b87bbc7abfbfbc21483",
-      "rows": 2668,
+      "sha256": "4bec87d9318c0145fbbd5134106bac4712b8032f54d94fbc9bd4bc9d181cd436",
+      "rows": 2669,
       "min_date": "2015-11-20",
-      "max_date": "2026-06-16"
+      "max_date": "2026-06-17"
     },
     "QQQ": {
       "file": "us/QQQ.csv",
-      "sha256": "1461a105ae58eb72a2c16c26aca95e365f50bc4d2ae30f2bb37ef1fa8256dcdf",
-      "rows": 6653,
+      "sha256": "3121f4d675a06b1d118c19c243b17b477eed4d8488937c9575656a7f7eaadd54",
+      "rows": 6654,
       "min_date": "2000-01-03",
-      "max_date": "2026-06-16"
+      "max_date": "2026-06-17"
     },
     "SPY": {
       "file": "us/SPY.csv",
-      "sha256": "a7baf5031354478735b43544becf6b30cd5b7ff2eb1f516de5a303e4e2feb7f9",
-      "rows": 6653,
+      "sha256": "4ba4a552d44b45adecbbd3856653888c793ed354b923ef233cccfddabf4562ed",
+      "rows": 6654,
       "min_date": "2000-01-03",
-      "max_date": "2026-06-16"
+      "max_date": "2026-06-17"
     },
     "TLT": {
       "file": "us/TLT.csv",
-      "sha256": "87a64622c113b17f6d729f1adafc79ae9d7b874ef6fb87aa64b14b178756c3c2",
-      "rows": 6009,
+      "sha256": "4dc1fdca834cc888b78b2fc33ca65157860d4920f0427a8b2ba488eaa14b7008",
+      "rows": 6010,
       "min_date": "2002-07-30",
-      "max_date": "2026-06-16"
+      "max_date": "2026-06-17"
     },
     "TWD=X": {
       "file": "us/TWD=X.csv",
-      "sha256": "906090f96a016b36715c6a094774ecc30572b6b36d2d69acf978f12375aea992",
-      "rows": 5353,
+      "sha256": "6cac6fedd66a10820aa19d8fc44732ea5d4f36a98b8feddb8310534c62406b18",
+      "rows": 5354,
       "min_date": "2004-03-24",
-      "max_date": "2026-06-16"
+      "max_date": "2026-06-17"
     },
     "XLE": {
       "file": "us/XLE.csv",
-      "sha256": "4c42eb3836e3e2e10910b107033ea5b0097b4cfd8a15706376781156e2fc955e",
-      "rows": 6653,
+      "sha256": "197a23657cbd211214bb7149807f2a5945c5bd5e8cbf6deae87a129447df4b34",
+      "rows": 6654,
       "min_date": "2000-01-03",
-      "max_date": "2026-06-16"
+      "max_date": "2026-06-17"
     },
     "XLP": {
       "file": "us/XLP.csv",
-      "sha256": "1bc488927467357d94aebff804e8431e7f9b5fcfaea76f4291bf486284382ba1",
-      "rows": 6653,
+      "sha256": "819c91cde14181893944d43ad2156159dfa5d855f7ead22264c80d4c58351654",
+      "rows": 6654,
       "min_date": "2000-01-03",
-      "max_date": "2026-06-16"
+      "max_date": "2026-06-17"
     },
     "XLV": {
       "file": "us/XLV.csv",
-      "sha256": "eb1486eb26832fd4d3e2102d982253dd6ae744ad7ecf2dc5516d4547e7102ab8",
-      "rows": 6653,
+      "sha256": "353ffb280b3f35a536c56f6c986572d7e71a09ac958250a5981cd85450dd8a10",
+      "rows": 6654,
       "min_date": "2000-01-03",
-      "max_date": "2026-06-16"
+      "max_date": "2026-06-17"
     }
   }
 }
