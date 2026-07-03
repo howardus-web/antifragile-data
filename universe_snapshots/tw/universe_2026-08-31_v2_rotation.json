@@ -1,0 +1,36 @@
+{
+  "universe_name": "TW_Electronics_Top20",
+  "version": "v2_rotation",
+  "effective_date": "2026-08-31",
+  "based_on_snapshot": "2026-02-28",
+  "update_frequency_months": 6,
+  "lag_months": 6,
+  "exclusions": [
+    "2412.TW",
+    "3045.TW",
+    "4904.TW"
+  ],
+  "tickers": [
+    "2330.TW",
+    "2308.TW",
+    "2317.TW",
+    "2454.TW",
+    "3711.TW",
+    "2382.TW",
+    "2408.TW",
+    "7769.TW",
+    "2383.TW",
+    "2303.TW",
+    "2345.TW",
+    "3037.TW",
+    "6669.TW",
+    "3017.TW",
+    "2327.TW",
+    "2360.TW",
+    "2344.TW",
+    "3653.TW",
+    "3231.TW",
+    "2368.TW"
+  ],
+  "notes": "Built via tw_universe_builder.py from TWSE official data (t187ap03_L industry codes 24-31 + MI_INDEX close 2026-02-26). Methodology validated against official 電子類指數 same-day 2026-06-30 (20/20 match)."
+}
