@@ -9,7 +9,7 @@ tickers_tw = [
     "2395.TW","2454.TW","3008.TW","3034.TW","4938.TW",
     "2059.TW","3653.TW","3661.TW","0050.TW","0053.TW","0055.TW",
     "00679B.TW",
-    # 2026-08 rotation 新進六檔（universe_2026-08-31_v2_rotation.json）：
+    # 2026-08 rotation 新進（見對應 universe_*.json）:
     "2344.TW","2360.TW","2368.TW","2408.TW","3037.TW","7769.TW",
 ]
 
