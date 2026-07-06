@@ -17,8 +17,9 @@ tickers_us = [
     "QQQ","TLT","GLD","HGER","DBMF","CTA",
     "BTAL","XLE","SPY","XLP","XLV","IEF",
     "ALLW","BRK-B",
-    "CSNDX.SW","IGLN.L","IUES.L","DTLA.L"
+    "CSNDX.SW","IGLN.L","IUES.L","DTLA.L","IUHC.L",
 ]
+# 2026-07：新增 IUHC.L — CDE_XLV pilot execution vehicle（spec v1.5 §4.1，XLV→IUHC）。
 # 註：TWD=X 已移出 yfinance 清單，改由下方 update_twd_fx() 以 CBC 增量合併更新。
 # 2026-07-03 切換：yfinance TWD=X 序列有系統性壞 tick（round-trip 型 84 天 +
 # 2011-10 除誤值災難級錯誤），來源換為央行公布之台北外匯經紀收盤匯率。
@@ -30,6 +31,7 @@ yf_rename = {
     "IGLN.L":    "IGLN",
     "IUES.L":    "IUES",
     "DTLA.L":    "DTLA",
+    "IUHC.L":    "IUHC",
     "00679B.TWO": "00679B.TW",
 }
 
