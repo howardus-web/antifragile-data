@@ -1,0 +1,26 @@
+{
+  "universe_13y_iv_baseline": {
+    "window": "2012-10-01 \u2192 2026-07-01 (clamped)",
+    "cagr": 0.06100549474816441,
+    "sharpe": 0.9867602305235869,
+    "max_dd": -0.09261782256517337,
+    "max_dd_date": "2016-12-01"
+  },
+  "universe_26y_monthly_iv_baseline": {
+    "window": "2000-05-31 \u2192 2026-05-31 (clamped)",
+    "cagr": 0.08132595367639173,
+    "sharpe": 1.1091228149445191,
+    "max_dd": -0.14769756415063617,
+    "max_dd_date": "2008-10-31"
+  },
+  "universe_real_cde_xlv_reference": {
+    "window": "2020-06-01 \u2192 2026-06-30 (clamped)",
+    "CAGR": 0.089084,
+    "Sharpe": 1.2499,
+    "MaxDD": -0.067152,
+    "MaxDD_date": "2020-10-30",
+    "active_months": 45,
+    "total_months": 74,
+    "note": "IV base only + CDE_XLV daily MA60/120, production reconciliation reference"
+  }
+}
