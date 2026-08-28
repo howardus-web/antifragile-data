@@ -2,7 +2,7 @@ name: Update Data & Rebuild Matrices
 
 on:
   schedule:
-    - cron: "0 21 * * *"   # 台灣時間每天早上 05:00
+    - cron: "17 21 * * *"   # 台灣時間每天早上 05:17
   workflow_dispatch:         # 允許手動觸發
 
 permissions:
@@ -15,6 +15,7 @@ concurrency:
 jobs:
   update-and-build:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
 
     steps:
       - name: Checkout repo
@@ -36,7 +37,7 @@ jobs:
       - name: Update price data
         run: python update.py
 
-      # Step 2: 立刻重建 calendar（不需要偵測 diff，每次都跑）
+      # Step 2: 立刻重建 calendar / matrices
       - name: Rebuild matrices (US + TW)
         run: python build_matrix.py
 
