@@ -5,8 +5,8 @@ Master calendar : 0050.TW
 Trading days    : 4321
 Master min date : 2009-01-02
 Master max date : 2026-08-28
-Matrix shape    : 4321 x 62
-NaN cells (info): 36451
+Matrix shape    : 4321 x 63
+NaN cells (info): 36455
 
 NOTE: NaN here is often normal (different start dates). Backtest layer should decide the valid common-start window.
 
@@ -61,6 +61,7 @@ Per-ticker MaxDate lag to master max (days) [larger = more stale]:
 - 2383.TW: 0
 - 2395.TW: 0
 - 2408.TW: 0
+- 2449.TW: 0
 - 2454.TW: 0
 - 3008.TW: 0
 - 3017.TW: 0
