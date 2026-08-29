@@ -1,6 +1,7 @@
 import yfinance as yf
 import pandas as pd
 import os
+import listing_guard
 
 tickers_tw = [
     "2301.TW","2303.TW","2308.TW","2317.TW","2327.TW",
@@ -11,6 +12,10 @@ tickers_tw = [
     "00679B.TW",
     # 2026-08 rotation 新進（見 universe_2026-08-31_v2_rotation.json）:
     "2344.TW","2360.TW","2368.TW","2408.TW","2449.TW",
+    # 3037.TW／7769.TW：本輪 Owner Override／mechanical eligibility 排除，不在有效母池內，
+    # 但仍在市場上、仍需要價格追蹤（3037 為 Owner Override 候選標的；7769 為未來可能滿足
+    # signal eligibility 的新股），故不從此列表移除：
+    "3037.TW","7769.TW",
 ]
 
 tickers_us = [
@@ -46,6 +51,17 @@ def download_adj_close(ticker, folder):
         return
     df = df[["Close"]]            # auto_adjust=True → Close = Adjusted Close
     df.rename(columns={"Close": "AdjClose"}, inplace=True)
+    # 興櫃／上市資料語意防呆：台股標的（folder=="tw"）若查得到官方上市日期，
+    # 把上市日之前的列砍掉（yfinance 對興櫃轉上市股回傳的是無接縫連續序列，
+    # 上市前後價格形成機制不同，不能被當成同一段「上市後歷史」）。
+    # 非台股（US/UCITS）listing_guard 一律回 None，不受影響。見 listing_guard.py。
+    if folder == "tw":
+        before = len(df)
+        df, listing_date = listing_guard.truncate_pre_listing(df, ticker)
+        if listing_date:
+            removed = before - len(df)
+            if removed > 0:
+                print(f"  ↳ 上市日 {listing_date}，砍除上市前 {removed} 筆興櫃期間資料")
     save_name = yf_rename.get(ticker, ticker)
     df.to_csv(f"{folder}/{save_name}.csv")
     print("Saved:", folder, save_name)
