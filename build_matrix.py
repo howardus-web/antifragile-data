@@ -4,6 +4,7 @@ import argparse
 from pathlib import Path
 
 import pandas as pd
+import listing_guard
 
 
 # ---------------------------
@@ -113,6 +114,12 @@ def build_market(market: str) -> None:
             "min_date": str(s.index.min().date()),
             "max_date": str(s.index.max().date()),
         }
+        # provenance：查得到官方上市日期才加這欄（美股／UCITS 一律查不到，不受影響）；
+        # 跟 update.py / tw_universe_builder.py 共用同一個 listing_guard，manifest 每次
+        # 重建都會重新查一次，不怕這欄位在某次 rebuild 被洗掉又長不回來。
+        listing_date = listing_guard.get_listing_date(t)
+        if listing_date:
+            file_meta[t]["listing_date"] = listing_date
 
     tickers = sorted(series_map.keys())
     master = pick_master_ticker(preferred_master, set(tickers))
