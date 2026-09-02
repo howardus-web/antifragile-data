@@ -16,6 +16,16 @@ tickers_tw = [
     # 但仍在市場上、仍需要價格追蹤（3037 為 Owner Override 候選標的；7769 為未來可能滿足
     # signal eligibility 的新股），故不從此列表移除：
     "3037.TW","7769.TW",
+    # 2026-09 Top60 production migration 新進（見 universe_TBD_v3_top60_migration.json，
+    # rank 21-60，套用同一份 7769 listing_guard／3037 owner override 後的最終名單；
+    # 32 檔，全部現存股，price_patch/backfill 已對每檔逐筆檢查過起點）:
+    "3443.TW","8046.TW","6770.TW","3665.TW","2313.TW",
+    "3036.TW","2404.TW","3481.TW","3044.TW","2337.TW",
+    "4958.TW","3533.TW","6239.TW","6515.TW","6442.TW",
+    "2356.TW","2376.TW","3189.TW","2324.TW","6139.TW",
+    "2409.TW","2347.TW","3702.TW","6805.TW","8210.TW",
+    "2474.TW","6415.TW","6789.TW","3706.TW","6781.TW",
+    "5269.TW","2385.TW",
 ]
 
 tickers_us = [
