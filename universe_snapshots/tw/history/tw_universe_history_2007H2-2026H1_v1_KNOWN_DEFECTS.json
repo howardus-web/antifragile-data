@@ -1,0 +1,142 @@
+{
+ "file": "tw_universe_history_2007H2-2026H1_v1.json",
+ "status": "SUPERSEDED — keep for reproducibility of 2026-07-08 ~ 2026-08-31 research only; do not use for new research",
+ "root_cause": "tw_hist_build.py get() only failed on fully-empty responses; partial/incorrect MI_INDEX industry tables were accepted silently, dropping large caps and promoting marginal names",
+ "defective_dates": 11,
+ "total_dates": 38,
+ "defects": {
+  "20100226": {
+   "kind": "membership_gap",
+   "missing_from_v1": [
+    "2317",
+    "2354"
+   ],
+   "spurious_in_v1": [
+    "2408",
+    "8046"
+   ]
+  },
+  "20110831": {
+   "kind": "membership_gap",
+   "missing_from_v1": [
+    "2347"
+   ],
+   "spurious_in_v1": [
+    "2301"
+   ]
+  },
+  "20140227": {
+   "kind": "membership_gap",
+   "missing_from_v1": [
+    "2317",
+    "2474"
+   ],
+   "spurious_in_v1": [
+    "2324",
+    "3034"
+   ]
+  },
+  "20150226": {
+   "kind": "membership_gap",
+   "missing_from_v1": [
+    "2498"
+   ],
+   "spurious_in_v1": [
+    "3034"
+   ]
+  },
+  "20180227": {
+   "kind": "membership_gap",
+   "missing_from_v1": [
+    "2301",
+    "2357",
+    "2382",
+    "2395",
+    "4938"
+   ],
+   "spurious_in_v1": [
+    "2337",
+    "2344",
+    "3034",
+    "3702",
+    "6239"
+   ]
+  },
+  "20180831": {
+   "kind": "membership_gap",
+   "missing_from_v1": [
+    "2409",
+    "3008",
+    "3481"
+   ],
+   "spurious_in_v1": [
+    "2301",
+    "2377",
+    "3532"
+   ]
+  },
+  "20190227": {
+   "kind": "price_error_rank_order_only",
+   "missing_from_v1": [],
+   "spurious_in_v1": [],
+   "detail": "same 20 members; v1 close wrong for 3481 (12.45 vs 10.25) and 3008 (4305 vs 4360); adjudicated by FinMind raw daily close 2026-09-02; ranks 15-18 shuffled"
+  },
+  "20210831": {
+   "kind": "membership_gap",
+   "missing_from_v1": [
+    "2308",
+    "2327",
+    "3037",
+    "8046"
+   ],
+   "spurious_in_v1": [
+    "2301",
+    "2345",
+    "2409",
+    "5269"
+   ]
+  },
+  "20220225": {
+   "kind": "membership_gap",
+   "missing_from_v1": [
+    "2308",
+    "2327",
+    "2357",
+    "2382",
+    "2395",
+    "3037",
+    "4938",
+    "8046"
+   ],
+   "spurious_in_v1": [
+    "2344",
+    "2345",
+    "2347",
+    "2474",
+    "3189",
+    "3481",
+    "5269",
+    "6409"
+   ]
+  },
+  "20230831": {
+   "kind": "membership_gap",
+   "missing_from_v1": [
+    "2317"
+   ],
+   "spurious_in_v1": [
+    "2327"
+   ]
+  },
+  "20250829": {
+   "kind": "membership_gap",
+   "missing_from_v1": [
+    "3008"
+   ],
+   "spurious_in_v1": [
+    "2379"
+   ]
+  }
+ },
+ "downstream_revalidation": "see BUILD_NOTES_v2.md §六"
+}
