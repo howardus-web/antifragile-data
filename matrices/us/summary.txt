@@ -14,23 +14,23 @@ Per-ticker MaxDate lag to master max (days) [larger = more stale]:
 - ALLW: 0
 - BRK-B: 0
 - BTAL: 0
-- CSNDX: 0
 - CTA: 0
 - DBMF: 0
-- DTLA: 0
 - GLD: 0
 - HGER: 0
 - IEF: 0
-- IGLN: 0
-- IUES: 0
-- IUHC: 0
 - QQQ: 0
 - SPY: 0
 - TLT: 0
-- TWD=X: 0
 - XLE: 0
 - XLP: 0
 - XLV: 0
+- CSNDX: -3
+- DTLA: -3
+- IGLN: -3
+- IUES: -3
+- IUHC: -3
+- TWD=X: -3
 
 Top missing ratios in FULL matrix (often just late inception):
 - ALLW: 94.366%
