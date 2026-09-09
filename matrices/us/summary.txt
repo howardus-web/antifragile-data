@@ -2,10 +2,10 @@ Data Layer Summary (FULL matrix) — US
 ================================
 
 Master calendar : QQQ
-Trading days    : 6710
+Trading days    : 6711
 Master min date : 2000-01-03
-Master max date : 2026-09-08
-Matrix shape    : 6710 x 20
+Master max date : 2026-09-09
+Matrix shape    : 6711 x 20
 NaN cells (info): 47771
 
 NOTE: NaN here is often normal (different start dates). Backtest layer should decide the valid common-start window.
@@ -33,11 +33,11 @@ Per-ticker MaxDate lag to master max (days) [larger = more stale]:
 - XLV: 0
 
 Top missing ratios in FULL matrix (often just late inception):
-- ALLW: 94.352%
-- CTA: 83.159%
-- HGER: 82.906%
-- DBMF: 72.519%
-- DTLA: 69.404%
-- IUES: 60.328%
-- IUHC: 60.328%
-- BTAL: 43.845%
+- ALLW: 94.338%
+- CTA: 83.147%
+- HGER: 82.894%
+- DBMF: 72.508%
+- DTLA: 69.394%
+- IUES: 60.319%
+- IUHC: 60.319%
+- BTAL: 43.838%
