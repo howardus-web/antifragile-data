@@ -37,6 +37,14 @@ jobs:
       - name: Update price data
         run: python update.py
 
+      # Step 1b: 下載 CMD-TS 32 市場感測器資料（x2_sensor/）
+      # 與 Step 1 同一套every-daily-run全量重抓+完整覆寫慣例，見
+      # docs/acquisition_contract.md。失敗即讓這個 job 失敗（exit 1），
+      # 不靜默保留舊檔——update_cmdts_x2.py 自己已經在缺任何一檔時
+      # non-zero exit。
+      - name: Update CMD-TS X2 sensor data
+        run: python update_cmdts_x2.py
+
       # Step 2: 立刻重建 calendar / matrices
       - name: Rebuild matrices (US + TW)
         run: python build_matrix.py
