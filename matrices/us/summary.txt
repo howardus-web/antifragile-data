@@ -6,7 +6,7 @@ Trading days    : 6718
 Master min date : 2000-01-03
 Master max date : 2026-09-18
 Matrix shape    : 6718 x 20
-NaN cells (info): 47771
+NaN cells (info): 47766
 
 NOTE: NaN here is often normal (different start dates). Backtest layer should decide the valid common-start window.
 
@@ -37,7 +37,7 @@ Top missing ratios in FULL matrix (often just late inception):
 - CTA: 83.06%
 - HGER: 82.807%
 - DBMF: 72.432%
-- DTLA: 69.321%
-- IUES: 60.256%
-- IUHC: 60.256%
+- DTLA: 69.306%
+- IUES: 60.241%
+- IUHC: 60.241%
 - BTAL: 43.793%
