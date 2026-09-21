@@ -5,8 +5,8 @@ Master calendar : 0050.TW
 Trading days    : 4338
 Master min date : 2009-01-02
 Master max date : 2026-09-20
-Matrix shape    : 4338 x 127
-NaN cells (info): 89187
+Matrix shape    : 4338 x 150
+NaN cells (info): 109398
 
 NOTE: NaN here is often normal (different start dates). Backtest layer should decide the valid common-start window.
 
@@ -17,20 +17,24 @@ Per-ticker MaxDate lag to master max (days) [larger = more stale]:
 - 2403.TW: 5795
 - 3367.TW: 5471
 - 8008.TW: 4819
+- 2315.TW: 4769
 - 3697.TW: 4631
+- 8078.TW: 4601
+- 2384.TW: 4324
+- 6286.TW: 3805
 - 3474.TW: 3582
 - 2311.TW: 3078
 - 2325.TW: 3078
+- 3514.TW: 2925
 - 3519.TW: 2700
+- 2475.TW: 2690
+- 2448.TW: 2097
 - 2456.TW: 1727
-- 2353.TW: 79
-- 2354.TW: 79
-- 2377.TW: 79
+- 3682.TW: 1021
 - 2492.TW: 79
 - 2498.TW: 79
 - 3532.TW: 79
 - 3673.TW: 79
-- 6409.TW: 79
 - 6456.TW: 79
 - 2323.TW: 18
 - 2342.TW: 18
@@ -73,6 +77,7 @@ Per-ticker MaxDate lag to master max (days) [larger = more stale]:
 - 6531.TW: 18
 - 6719.TW: 18
 - 8163.TW: 18
+- 2450.TW: 2
 - 0050.TW: 0
 - 0053.TW: 0
 - 0055.TW: 0
@@ -83,23 +88,34 @@ Per-ticker MaxDate lag to master max (days) [larger = more stale]:
 - 2317.TW: 0
 - 2324.TW: 0
 - 2327.TW: 0
+- 2328.TW: 0
+- 2332.TW: 0
 - 2337.TW: 0
 - 2344.TW: 0
 - 2345.TW: 0
 - 2347.TW: 0
+- 2352.TW: 0
+- 2353.TW: 0
+- 2354.TW: 0
 - 2356.TW: 0
 - 2360.TW: 0
+- 2362.TW: 0
 - 2368.TW: 0
 - 2376.TW: 0
+- 2377.TW: 0
 - 2379.TW: 0
 - 2382.TW: 0
 - 2383.TW: 0
 - 2385.TW: 0
+- 2388.TW: 0
+- 2392.TW: 0
+- 2393.TW: 0
 - 2395.TW: 0
 - 2404.TW: 0
 - 2408.TW: 0
 - 2409.TW: 0
 - 2449.TW: 0
+- 2451.TW: 0
 - 2474.TW: 0
 - 3008.TW: 0
 - 3017.TW: 0
@@ -109,9 +125,11 @@ Per-ticker MaxDate lag to master max (days) [larger = more stale]:
 - 3044.TW: 0
 - 3189.TW: 0
 - 3231.TW: 0
+- 3406.TW: 0
 - 3443.TW: 0
 - 3481.TW: 0
 - 3533.TW: 0
+- 3622.TW: 0
 - 3653.TW: 0
 - 3661.TW: 0
 - 3665.TW: 0
@@ -121,8 +139,12 @@ Per-ticker MaxDate lag to master max (days) [larger = more stale]:
 - 4938.TW: 0
 - 4958.TW: 0
 - 5269.TW: 0
+- 6116.TW: 0
 - 6139.TW: 0
+- 6176.TW: 0
 - 6239.TW: 0
+- 6409.TW: 0
+- 6414.TW: 0
 - 6415.TW: 0
 - 6442.TW: 0
 - 6515.TW: 0
@@ -133,6 +155,7 @@ Per-ticker MaxDate lag to master max (days) [larger = more stale]:
 - 6805.TW: 0
 - 7769.TW: 0
 - 8046.TW: 0
+- 8150.TW: 0
 - 8210.TW: 0
 - 2303.TW: -1
 - 2330.TW: -1
@@ -147,4 +170,4 @@ Top missing ratios in FULL matrix (often just late inception):
 - 2403.TW: 89.442%
 - 3367.TW: 84.371%
 - 6805.TW: 83.956%
-- 3697.TW: 82.665%
+- 3697.TW: 82.619%
