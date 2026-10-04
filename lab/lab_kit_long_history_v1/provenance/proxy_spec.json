@@ -1,0 +1,57 @@
+{
+ "F1": {
+  "a": -0.0001714906156339278,
+  "b_BAB": 0.7176209565884056,
+  "c_MktRF": -0.6164957703907654,
+  "form": "r = rf + a + b*BAB + c*(Mkt-RF), monthly, fit 2011-10..2026-04",
+  "available_from": "1930-12 (BAB) ; daily version possible (AQR BAB daily + FF daily Mkt-RF, RF)"
+ },
+ "S2": {
+  "form": "r = rf + (Lo20 - Hi20), Ken French beta-sorted quintiles, equal-weighted, no fitted parameter"
+ },
+ "S3": {
+  "form": "r = rf + mean over size quintiles ME3,ME4,ME5 of (BETA1 - BETA5), Ken French 25 ME x BETA portfolios, equal-weighted cells, no fitted parameter",
+  "available_from": "1963-07",
+  "frequency": "monthly"
+ },
+ "MIX2": {
+  "form": "0.5*F1 + 0.5*S3"
+ },
+ "sources": {
+  "BAB": "repo lab_kit data/aqr/bab_usa_monthly.csv (AQR, to 2026-04)",
+  "Mkt-RF, RF": "Ken French F-F_Research_Data_Factors_daily (CRSP 202608)",
+  "beta portfolios": "Ken French Portfolios_Formed_on_BETA / 25_Portfolios_ME_BETA_5x5 (CRSP 202608)",
+  "real BTAL": "antifragile-data us/BTAL.csv"
+ },
+ "status": "LAB / research-only. Not in repo, not in corpus. Extended files chain proxy returns (before 2011-10) to real BTAL returns (2011-10 onward).",
+ "live_fit_2011-10_to_2026-04": {
+  "BAB_only": {
+   "corr": 0.476,
+   "R2": 0.215,
+   "beta_mkt": -0.067,
+   "signal_corr": 0.067
+  },
+  "F1": {
+   "corr": 0.782,
+   "R2": 0.611,
+   "beta_mkt": -0.666,
+   "signal_corr": 0.723
+  },
+  "S3": {
+   "corr": 0.841,
+   "R2": 0.581,
+   "beta_mkt": -0.829,
+   "signal_corr": 0.762
+  },
+  "MIX2": {
+   "corr": 0.864,
+   "R2": 0.741,
+   "beta_mkt": -0.748,
+   "signal_corr": 0.77
+  },
+  "real_BTAL": {
+   "beta_mkt": -0.665,
+   "vol_ann": 0.147
+  }
+ }
+}

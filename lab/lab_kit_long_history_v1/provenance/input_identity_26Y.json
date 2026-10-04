@@ -1,0 +1,70 @@
+{
+ "label": "LAB_LONG_HISTORY",
+ "QQQ": {
+  "source_series": "QQQ",
+  "file": "lab/lab_kit_2026-07-07/data/tickers/QQQ_full.csv",
+  "sha256": "53ce02829bb850850566902a24a44bec3120e2f270bcd44fcbcd1562adef8f9a",
+  "first_raw_date": "1999-03-10",
+  "last_raw_date": "2026-07-02"
+ },
+ "TLT": {
+  "source_series": "VUSTX",
+  "file": "lab/lab_kit_2026-07-07/data/tickers/VUSTX_full.csv",
+  "sha256": "d8fbcc599df8f760ed23522202b7ab98ac6704455368260b87976cc01af3e23e",
+  "first_raw_date": "1986-05-19",
+  "last_raw_date": "2026-07-02"
+ },
+ "GLD": {
+  "source_series": "CEF",
+  "file": "lab/lab_kit_2026-07-07/data/tickers/CEF.csv",
+  "sha256": "69a89bab756ef82af5728b39350e79bcfab49d133c0745c03e6c1ad894ae41a2",
+  "first_raw_date": "1986-04-03",
+  "last_raw_date": "2026-07-02"
+ },
+ "XLE": {
+  "source_series": "XLE",
+  "file": "lab/lab_kit_2026-07-07/data/tickers/XLE_full.csv",
+  "sha256": "06fb52323c6e07cffbb63748bbcfa84dce8b2447701ed6e1ed5d5fad3fab5f89",
+  "first_raw_date": "1998-12-22",
+  "last_raw_date": "2026-07-02"
+ },
+ "MF": {
+  "source_series": "AQR TSMOM (all-asset aggregate, monthly returns)",
+  "file": "lab/lab_kit_2026-07-07/data/aqr/tsmom_monthly.csv",
+  "sha256": "7cd4cf947498a638d8b5d4d8b07d5e33dd5e4223c26ea24c01d8866e83fad238",
+  "first_raw_date": "1985-01",
+  "last_raw_date": "2026-05",
+  "identity": "managed-futures / time-series-momentum CATEGORY proxy; NOT a DBMF return reconstruction"
+ },
+ "BTAL_legs": {
+  "F1": {
+   "def": "rf + a + 0.7176*BAB - 0.6165*(Mkt-RF) before 2011-10; real BTAL from 2011-10 (chain-linked, kit convention)",
+   "file": "btal_extended_F1_monthly_returns.csv",
+   "sha256": "3657a14ef9a229ef75aa199b795fe9a7a5d55cd3eeee963350322d253abcc304",
+   "role": "PRIMARY (fit-informed)"
+  },
+  "S3": {
+   "def": "rf + mean_{ME3,ME4,ME5}(LoBeta - HiBeta), French size x beta, EW cells, before 2011-10; real BTAL from 2011-10",
+   "file": "btal_extended_S3_monthly_returns.csv",
+   "sha256": "7b091d5675f63f10eb633efc242773da19bae9b6bab80a8d33da6859c1ea5fa3",
+   "role": "PRIMARY (construction-informed)"
+  },
+  "HYBRID": {
+   "def": "0.5*F1 + 0.5*S3 before 2011-10; real BTAL after",
+   "file": "btal_extended_MIX2_monthly_returns.csv",
+   "sha256": "616fd844f9227c469bf64c1c44ae427d091a9cbae0ef6052f1adeb9bf8200c8c",
+   "role": "descriptive midpoint only"
+  },
+  "BAB": {
+   "def": "lab kit btal_extended.csv: AQR BAB daily chained back from real BTAL start (2011-09-13); real BTAL after",
+   "file": "lab/lab_kit_2026-07-07/data/derived/btal_extended.csv",
+   "sha256": "ec4039cc840002763dbab702ffd1879a4b3fe83980fbf7548b269b8e0fa197b0",
+   "role": "NEGATIVE CONTROL only (old 26Y proxy)"
+  },
+  "frozen_package": {
+   "file": "BTAL_LONG_PROXY_LAB_2026-10-04.zip",
+   "sha256": "6f6c1f79a6f3baaa2ff51ba8c8115b1b17b1d4fcca14bd21d63a78c15fda746b"
+  },
+  "splice_month": "2011-10 (first full month of real BTAL)"
+ }
+}

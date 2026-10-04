@@ -1,0 +1,240 @@
+{
+ "kit": "IRG_LONG_HISTORY_RESEARCH_KIT_v1",
+ "kit_version": "v1",
+ "labels": [
+  "RESEARCH_ONLY",
+  "LAB_LONG_HISTORY",
+  "PROXY_CONTAINING",
+  "NOT_PRODUCTION_EQUIVALENT"
+ ],
+ "canonical_location": {
+  "repo": "howardus-web/antifragile-data",
+  "path": "lab/lab_kit_long_history_v1",
+  "role": "runtime authority for Research Harness long_history(); a zip of this directory is only a portable delivery / backup mirror"
+ },
+ "runtime_rule": "The routine Harness LONG path consumes these frozen series as-is. F1 is never refit and S3 is never rebuilt at runtime. provenance/proxy_construction_AUDIT_ONLY/ is kept for audit only and is never imported or executed by the Harness. No production module, production state or execution path may depend on this kit.",
+ "evidence_class": "LAB_LONG_HISTORY",
+ "production_equivalent": false,
+ "frequency": "MONTHLY",
+ "purpose": "Frozen input series of the 2026-10-04 26Y long-history study, packaged so the Research Harness LONG surface (long_history_universe.py) can consume them without rebuilding proxy plumbing. Not production data; no production module reads this kit.",
+ "role_order": [
+  "QQQ",
+  "TLT",
+  "GLD",
+  "XLE",
+  "BTAL",
+  "MF"
+ ],
+ "roles": {
+  "QQQ": {
+   "economic_role": "US equity",
+   "source_series": "QQQ",
+   "file": "data/tickers/QQQ_full.csv",
+   "kind": "daily_adjclose",
+   "identity": "real QQQ",
+   "first_raw_date": "1999-03-10",
+   "last_raw_date": "2026-07-02",
+   "original_path": "lab/lab_kit_2026-07-07/data/tickers/QQQ_full.csv"
+  },
+  "TLT": {
+   "economic_role": "long Treasury",
+   "source_series": "VUSTX",
+   "file": "data/tickers/VUSTX_full.csv",
+   "kind": "daily_adjclose",
+   "identity": "PROXY for the long-Treasury role (Vanguard Long-Term Treasury mutual fund); NOT TLT",
+   "first_raw_date": "1986-05-19",
+   "last_raw_date": "2026-07-02",
+   "original_path": "lab/lab_kit_2026-07-07/data/tickers/VUSTX_full.csv"
+  },
+  "GLD": {
+   "economic_role": "gold",
+   "source_series": "CEF",
+   "file": "data/tickers/CEF.csv",
+   "kind": "daily_adjclose",
+   "identity": "PROXY for the gold role (gold + silver trust); NOT GLD; contains silver exposure",
+   "first_raw_date": "1986-04-03",
+   "last_raw_date": "2026-07-02",
+   "original_path": "lab/lab_kit_2026-07-07/data/tickers/CEF.csv"
+  },
+  "XLE": {
+   "economic_role": "energy equity",
+   "source_series": "XLE",
+   "file": "data/tickers/XLE_full.csv",
+   "kind": "daily_adjclose",
+   "identity": "real XLE",
+   "first_raw_date": "1998-12-22",
+   "last_raw_date": "2026-07-02",
+   "original_path": "lab/lab_kit_2026-07-07/data/tickers/XLE_full.csv"
+  },
+  "BTAL": {
+   "economic_role": "anti-beta",
+   "source_series": "BTAL long proxy (F1 or S3, caller must choose) chain-linked into real BTAL",
+   "kind": "monthly_return",
+   "splice_month": "2011-10",
+   "identity": "PROXY before 2011-10; real BTAL from 2011-10 onward (first full month of real BTAL)",
+   "variants": {
+    "F1": {
+     "file": "data/derived/btal_extended_F1_monthly_returns.csv",
+     "role": "PRIMARY (fit-informed)",
+     "definition": "rf + a + 0.7176*BAB - 0.6165*(Mkt-RF) before 2011-10; real BTAL from 2011-10 (chain-linked, kit convention)"
+    },
+    "S3": {
+     "file": "data/derived/btal_extended_S3_monthly_returns.csv",
+     "role": "PRIMARY (construction-informed)",
+     "definition": "rf + mean_{ME3,ME4,ME5}(LoBeta - HiBeta), French size x beta, EW cells, before 2011-10; real BTAL from 2011-10"
+    }
+   },
+   "true_btal_overlap_file": "data/derived/btal_proxy_monthly_returns.csv",
+   "true_btal_overlap_column": "BTAL"
+  },
+  "MF": {
+   "economic_role": "managed futures",
+   "source_series": "AQR TSMOM (all-asset aggregate, monthly returns)",
+   "file": "data/aqr/tsmom_monthly.csv",
+   "kind": "monthly_return",
+   "identity": "managed-futures CATEGORY PROXY; NOT a DBMF reconstruction; the LONG vehicle of the Structural MF sleeve (PROD vehicle DBMF, MEDIUM substitute AQMIX)",
+   "first_raw_date": "1985-01",
+   "last_raw_date": "2026-05",
+   "original_path": "lab/lab_kit_2026-07-07/data/aqr/tsmom_monthly.csv"
+  }
+ },
+ "structural_mf_sleeve_ontology": {
+  "sleeve": "Structural MF (economic sleeve / structural capital seat of the US sleeve)",
+  "sleeve_weight": "15% of the US sleeve — sleeve-level architecture constant, not a DBMF weight",
+  "vehicles": {
+   "PROD": "DBMF (production vehicle)",
+   "MEDIUM": "AQMIX (research substitute)",
+   "LONG": "AQR TSMOM (this kit; long-history category proxy)"
+  },
+  "evidence_rule": "AQMIX / AQR TSMOM evidence is never DBMF production-equivalent evidence",
+  "governance": "changing the vehicle does not change the sleeve architecture; a production vehicle replacement still requires formal production governance"
+ },
+ "btal_variants": [
+  "F1",
+  "S3"
+ ],
+ "btal_variant_rule": "F1 and S3 are BOTH primary. No default, no averaging, no winner. They differ only in the BTAL leg before the 2011-10 splice: two proxy constructions, not two independent historical universes.",
+ "not_canonical_and_not_exposed": {
+  "HYBRID / MIX2": "descriptive midpoint only in the 26Y study; file not included",
+  "BAB (lab kit btal_extended.csv)": "negative control / legacy proxy only; file not included",
+  "other columns of data/derived/btal_proxy_monthly_returns.csv": "the loader reads only the BTAL (real) column, for the splice identity check"
+ },
+ "provenance": {
+  "frozen_26Y_artifacts": {
+   "file": "DBMF_26Y_CRISIS_EXTENSION_ARTIFACTS_2026-10-04.zip",
+   "sha256": "ba6a0c50982bc468877335aae769152451780c08841baeeeb4f34993ffa001a0"
+  },
+  "frozen_btal_proxy_package": {
+   "file": "BTAL_LONG_PROXY_LAB_2026-10-04.zip",
+   "sha256": "6f6c1f79a6f3baaa2ff51ba8c8115b1b17b1d4fcca14bd21d63a78c15fda746b"
+  },
+  "price_and_tsmom_source": {
+   "repo": "howardus-web/antifragile-data",
+   "path": "lab/lab_kit_2026-07-07",
+   "repo_head_at_kit_build": "d4c725dde58a568e82716ffcd8107be84fc3b310",
+   "repo_head_at_26Y_study": "09a9a866 (per the 26Y artifact README); file hashes identical to the 26Y input_identity.json"
+  },
+  "hash_agreement": "every data/ file hash equals the corresponding sha256 in provenance/input_identity_26Y.json (prices, TSMOM, F1, S3); copies are byte-for-byte",
+  "not_done": "no refit of F1, no new coefficients, no reconstruction of S3, no newly downloaded series, no interpolation or backfill"
+ },
+ "payload_identity_sha256": "cd199ce37609c4779575646b746c5275197d73e4c1628e5f1bef85ec8ac64686",
+ "payload_identity_rule": "sha256 over the lines '<path>  <sha256>' of all class=data files, sorted by path, joined by \\n",
+ "files": {
+  "data/tickers/QQQ_full.csv": {
+   "sha256": "53ce02829bb850850566902a24a44bec3120e2f270bcd44fcbcd1562adef8f9a",
+   "bytes": 200617,
+   "class": "data"
+  },
+  "data/tickers/VUSTX_full.csv": {
+   "sha256": "d8fbcc599df8f760ed23522202b7ab98ac6704455368260b87976cc01af3e23e",
+   "bytes": 296601,
+   "class": "data"
+  },
+  "data/tickers/XLE_full.csv": {
+   "sha256": "06fb52323c6e07cffbb63748bbcfa84dce8b2447701ed6e1ed5d5fad3fab5f89",
+   "bytes": 203630,
+   "class": "data"
+  },
+  "data/tickers/CEF.csv": {
+   "sha256": "69a89bab756ef82af5728b39350e79bcfab49d133c0745c03e6c1ad894ae41a2",
+   "bytes": 297653,
+   "class": "data"
+  },
+  "data/aqr/tsmom_monthly.csv": {
+   "sha256": "7cd4cf947498a638d8b5d4d8b07d5e33dd5e4223c26ea24c01d8866e83fad238",
+   "bytes": 16283,
+   "class": "data"
+  },
+  "data/derived/btal_extended_F1_monthly_returns.csv": {
+   "sha256": "3657a14ef9a229ef75aa199b795fe9a7a5d55cd3eeee963350322d253abcc304",
+   "bytes": 24164,
+   "class": "data"
+  },
+  "data/derived/btal_extended_S3_monthly_returns.csv": {
+   "sha256": "7b091d5675f63f10eb633efc242773da19bae9b6bab80a8d33da6859c1ea5fa3",
+   "bytes": 24030,
+   "class": "data"
+  },
+  "data/derived/btal_proxy_monthly_returns.csv": {
+   "sha256": "07424019b6b1122091b8175f93d9a85459b89ce161e5a383060e6b0b375b23ea",
+   "bytes": 119210,
+   "class": "data"
+  },
+  "provenance/input_identity_26Y.json": {
+   "sha256": "3015ef7616c7c179d566f1e7544e464f28f8f544a1238bc36e99c286b3a5e728",
+   "bytes": 2858,
+   "class": "provenance"
+  },
+  "provenance/proxy_spec.json": {
+   "sha256": "281879ea66bba2edf6d69f7b7cd05f82a0233909f03477f160d4a24699b2ff21",
+   "bytes": 1636,
+   "class": "provenance"
+  },
+  "provenance/primary_freeze_sha256.txt": {
+   "sha256": "564abc2902935c0ebce0e704427727fb38619d4a9457716cd60989a75feef9a4",
+   "bytes": 282,
+   "class": "provenance"
+  },
+  "provenance/slot_weights_frozen.json": {
+   "sha256": "9a76359161de91db10f9438fa3714c98a04486d8920109130e4d99e7c8989c5f",
+   "bytes": 394,
+   "class": "provenance"
+  },
+  "provenance/proxy_construction_AUDIT_ONLY/build_proxy.py": {
+   "sha256": "bb307c85a265e5e878bffc21f052bc110fbedc2fa0c04f8907122db09abfb6ff",
+   "bytes": 5303,
+   "class": "provenance"
+  },
+  "README.md": {
+   "sha256": "c67669f724314ec35e524952fe8c2d8344eba6d9d2a3da42a8c92e9a819f564e",
+   "bytes": 7758,
+   "class": "doc"
+  },
+  "verify_kit.py": {
+   "sha256": "63b3d42f2bb7bdba547396945f749734f7f3732012bea4d80c6b5bb72d33473f",
+   "bytes": 4646,
+   "class": "tool"
+  },
+  "reference/lab26.py": {
+   "sha256": "7ac7ce576c921023d6ef41fe43c930676f7aa93e86b996fd49678bf7fdb89427",
+   "bytes": 11467,
+   "class": "reference"
+  },
+  "reference/full26_f1_monthly.csv": {
+   "sha256": "7bc47cade274cd1444f5483575174341b795bdfe639d3af0d1c5a3e93e8cd068",
+   "bytes": 144681,
+   "class": "reference"
+  },
+  "reference/full26_s3_monthly.csv": {
+   "sha256": "a978097d053360af5cf31dc471a96ee92057175d460e8d4c51a5ddb9725d71b3",
+   "bytes": 144336,
+   "class": "reference"
+  },
+  "reference/primary_results_frozen.json": {
+   "sha256": "03d4d469c8892ad27295226ab6c0ae6ed274e133658dbcb8ff19bc6e2cd384e5",
+   "bytes": 45604,
+   "class": "reference"
+  }
+ },
+ "built_at_utc": "2026-10-04T13:17:50Z"
+}
