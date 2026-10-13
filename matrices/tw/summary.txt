@@ -6,7 +6,7 @@ Trading days    : 4350
 Master min date : 2009-01-02
 Master max date : 2026-10-13
 Matrix shape    : 4350 x 150
-NaN cells (info): 110556
+NaN cells (info): 110497
 
 NOTE: NaN here is often normal (different start dates). Backtest layer should decide the valid common-start window.
 
@@ -165,9 +165,9 @@ Per-ticker MaxDate lag to master max (days) [larger = more stale]:
 Top missing ratios in FULL matrix (often just late inception):
 - 2411.TW: 100.0%
 - 3009.TW: 98.851%
-- 7769.TW: 95.172%
+- 7769.TW: 95.149%
 - 2350.TW: 91.816%
 - 2403.TW: 89.471%
 - 3367.TW: 84.414%
-- 6805.TW: 83.747%
+- 6805.TW: 83.724%
 - 3697.TW: 82.667%
