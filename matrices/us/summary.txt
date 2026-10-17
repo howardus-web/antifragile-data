@@ -14,7 +14,6 @@ Per-ticker MaxDate lag to master max (days) [larger = more stale]:
 - ALLW: 0
 - BRK-B: 0
 - BTAL: 0
-- CADUSD=X: 0
 - CSNDX: 0
 - CTA: 0
 - DBMF: 0
@@ -35,6 +34,7 @@ Per-ticker MaxDate lag to master max (days) [larger = more stale]:
 - XLE: 0
 - XLP: 0
 - XLV: 0
+- CADUSD=X: -1
 
 Top missing ratios in FULL matrix (often just late inception):
 - DBMFE: 94.583%
