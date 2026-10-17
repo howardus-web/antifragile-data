@@ -1,7 +1,14 @@
 import yfinance as yf
 import pandas as pd
 import os
+import sys
 import listing_guard
+
+# 2026-10-17 WL-006：台股入庫被 listing_guard 拒絕的標的（不寫檔）。非空 → 最後非零結束，
+# Action 的 commit/push 步驟不會執行，既有 production CSV 原封不動。
+LISTING_REFUSALS = []
+# v2.1：官方名冊通過驗證、但追蹤中的股票不在名冊 → 待 Owner 確認，本次拒絕這些代號（不靠舊 cache 放行）
+PENDING_EXIT_TICKERS = set()
 
 tickers_tw = [
     "2301.TW","2303.TW","2308.TW","2317.TW","2327.TW",
@@ -60,6 +67,18 @@ os.makedirs("tw", exist_ok=True)
 os.makedirs("us", exist_ok=True)
 
 def download_adj_close(ticker, folder):
+    if folder == "tw":
+        if ticker in PENDING_EXIT_TICKERS:
+            print(f"⛔ REFUSED {ticker}: {listing_guard.PENDING_TRACKED_EXIT} — 追蹤股票退出官方名冊，待 Owner 確認（既有檔案不動）")
+            LISTING_REFUSALS.append((ticker, listing_guard.PENDING_TRACKED_EXIT, "追蹤股票退出官方名冊，待 Owner 確認"))
+            return
+        # 先確認上市日身分（只讀已驗證 cache，不連網）。無法確認 → 不下載、不寫檔、記錄拒絕。
+        try:
+            listing_guard.ingestion_cutoff(ticker)
+        except listing_guard.ListingGuardRefusal as e:
+            print(f"⛔ REFUSED {ticker}: {e.status} — {e.reason}（既有檔案不動）")
+            LISTING_REFUSALS.append((ticker, e.status, e.reason))
+            return
     print("Downloading", ticker)
     df = yf.download(ticker, start="2000-01-01", auto_adjust=True)
     if df.empty:
@@ -67,10 +86,11 @@ def download_adj_close(ticker, folder):
         return
     df = df[["Close"]]            # auto_adjust=True → Close = Adjusted Close
     df.rename(columns={"Close": "AdjClose"}, inplace=True)
-    # 興櫃／上市資料語意防呆：台股標的（folder=="tw"）若查得到官方上市日期，
+    # 興櫃／上市資料語意防呆：台股標的（folder=="tw"）依已驗證官方上市日，
     # 把上市日之前的列砍掉（yfinance 對興櫃轉上市股回傳的是無接縫連續序列，
     # 上市前後價格形成機制不同，不能被當成同一段「上市後歷史」）。
-    # 非台股（US/UCITS）listing_guard 一律回 None，不受影響。見 listing_guard.py。
+    # ETF 為已驗證不適用、原樣；無法確認的標的在上面已被拒絕，走不到這裡。
+    # 非台股（US/UCITS）不經過這段。見 listing_guard.py v2。
     if folder == "tw":
         before = len(df)
         df, listing_date = listing_guard.truncate_pre_listing(df, ticker)
@@ -325,9 +345,19 @@ def update_contract_fx():
 
 
 if __name__ == "__main__":
+    # 官方上市日刷新：抓得到且通過驗證才合併進 listing_dates_verified.json；
+    # 抓不到／回應殘缺 → 沿用既有已驗證 cache（TWSE 暫時掛掉不影響日常更新）。
+    refresh = listing_guard.refresh_cache(tracked=tickers_tw)
+    print(refresh.summary())
+    PENDING_EXIT_TICKERS.update(t for t in tickers_tw if t.rsplit(".", 1)[0] in refresh.pending_tracked_exits)
     for t in tickers_tw:
         download_adj_close(t, "tw")
     for t in tickers_us:
         download_adj_close(t, "us")
     update_twd_fx()
     update_contract_fx()
+    if LISTING_REFUSALS or refresh.blocks_publication:
+        print("⛔⛔ listing_guard 拒絕以下台股入庫（未寫檔；本次以非零結束，Action 不會 commit）：")
+        for t, st, why in LISTING_REFUSALS:
+            print(f"   {t}: {st} — {why}")
+        sys.exit(2)
