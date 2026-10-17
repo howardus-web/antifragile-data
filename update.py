@@ -33,6 +33,10 @@ tickers_us = [
     "BTAL","XLE","SPY","XLP","XLV","IEF",
     "ALLW","BRK-B",
     "CSNDX.SW","IGLN.L","IUES.L","DTLA.L","IUHC.L",
+    # 2026-10-14 MAS vehicle migration（vehicle_registry.py）：DBMFE＝structural MF 執行載具
+    # （Euronext Paris, EUR），QBTL＝BTAL-like S5 base 載具（TSX, CAD）。存當地幣報價，
+    # USD 換算在 MAS 消費端用下方 EURUSD=X／CADUSD=X（FX Production Data Contract）。
+    "DBMFE.PA","QBTL.TO",
 ]
 # 2026-07：新增 IUHC.L — CDE_XLV pilot execution vehicle（spec v1.5 §4.1，XLV→IUHC）。
 # 註：TWD=X 已移出 yfinance 清單，改由下方 update_twd_fx() 以 CBC 增量合併更新。
@@ -47,6 +51,8 @@ yf_rename = {
     "IUES.L":    "IUES",
     "DTLA.L":    "DTLA",
     "IUHC.L":    "IUHC",
+    "DBMFE.PA":  "DBMFE",
+    "QBTL.TO":   "QBTL",
     "00679B.TWO": "00679B.TW",
 }
 
@@ -180,8 +186,148 @@ def update_twd_fx():
         print(f"⚠ yfinance fallback 也失敗：{e}；TWD=X 本次未更新")
 
 
-for t in tickers_tw:
-    download_adj_close(t, "tw")
-for t in tickers_us:
-    download_adj_close(t, "us")
-update_twd_fx()
+# ============================================================
+# EURUSD=X／CADUSD=X：FX Production Data Contract（MAS 2026-10-14，Owner 核准「官方定盤＋yf 暫補」）
+# ============================================================
+# 慣例：兩個檔都是「1 單位外幣 = 多少 USD」（與 yfinance EURUSD=X／CADUSD=X 同向）。
+#   EURUSD=X  官方＝ECB euro reference rate USD/EUR（EXR.D.USD.EUR.SP00.A，14:15 CET）
+#   CADUSD=X  官方＝Bank of Canada FXUSDCAD（CAD per USD）取倒數
+# 合併規則（同 CBC→TWD=X 的精神，另加暫補追蹤）：
+#   1. 官方值一律優先：覆蓋同日（含先前暫補值）、續接新日。
+#   2. 暫補只放在「最後一筆官方日期之後」且檔裡還沒有值的日子，來源 yfinance close，
+#      日期記在 us/fx_contract_provenance.json 的 provisional_dates。
+#   3. 某暫補日期已落在最後官方日期之前、但官方當天沒公布（官方休市）→ 刪掉該暫補列，
+#      讓消費端用前一筆官方值（ffill），不讓暫補值永久佔住官方休市日。
+#   4. 官方全部抓不到 → 只做第 2 步並大聲警告；下次官方成功即覆蓋。
+# MAS 端（vehicle_registry.py）缺檔／缺值／超過 4 個工作日未更新一律 fail closed。
+
+import json
+from datetime import date, timedelta
+
+FX_CONTRACT = {
+    "EURUSD=X": {"official": "ecb"},
+    "CADUSD=X": {"official": "boc"},
+}
+FX_PROVENANCE_PATH = "us/fx_contract_provenance.json"
+FX_CONTRACT_HISTORY_START = "2017-01-03"     # BoC valet 序列起點；ECB 亦涵蓋
+FX_OFFICIAL_LOOKBACK_DAYS = 45
+
+def _fx_rows_read(path: str) -> dict:
+    if not os.path.exists(path):
+        return {}
+    rows = {}
+    with open(path) as f:
+        for i, line in enumerate(f.read().splitlines()):
+            if i < 3:
+                continue
+            parts = line.split(",")
+            if len(parts) >= 2 and parts[0] and parts[1]:
+                rows[parts[0]] = parts[1]
+    return rows
+
+def _fx_rows_write(path: str, ticker: str, rows: dict) -> None:
+    with open(path, "w") as f:
+        f.write("\n".join(["Price,AdjClose", f"Ticker,{ticker}", "Date,"]) + "\n")
+        for d in sorted(rows):
+            f.write(f"{d},{rows[d]}\n")
+
+def _http_get(url: str) -> str:
+    last = None
+    for attempt in range(4):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": "MAS-data/1.0"})
+            with urllib.request.urlopen(req, timeout=40) as r:
+                return r.read().decode("utf-8", errors="replace")
+        except Exception as e:  # noqa: BLE001
+            last = e
+            time.sleep(2 + attempt)
+    raise RuntimeError(f"GET failed: {url}: {last}")
+
+def _fetch_ecb_usd_per_eur(start: str) -> dict:
+    url = ("https://data-api.ecb.europa.eu/service/data/EXR/D.USD.EUR.SP00.A"
+           f"?startPeriod={start}&format=csvdata")
+    import csv as _csv, io as _io
+    out = {}
+    for r in _csv.DictReader(_io.StringIO(_http_get(url))):
+        d, v = r.get("TIME_PERIOD", ""), r.get("OBS_VALUE", "")
+        try:
+            fv = float(v)
+        except ValueError:
+            continue
+        if re.match(r"^\d{4}-\d{2}-\d{2}$", d) and fv > 0:
+            out[d] = fv
+    return out
+
+def _fetch_boc_usd_per_cad(start: str) -> dict:
+    url = f"https://www.bankofcanada.ca/valet/observations/FXUSDCAD/json?start_date={start}"
+    data = json.loads(_http_get(url))
+    out = {}
+    for o in data.get("observations", []):
+        d = o.get("d", "")
+        try:
+            usdcad = float((o.get("FXUSDCAD") or {}).get("v"))
+        except (TypeError, ValueError):
+            continue
+        if usdcad > 0:
+            out[d] = 1.0 / usdcad
+    return out
+
+def update_contract_fx():
+    prov = {}
+    if os.path.exists(FX_PROVENANCE_PATH):
+        try:
+            prov = json.load(open(FX_PROVENANCE_PATH))
+        except Exception:  # noqa: BLE001
+            prov = {}
+    for ticker, cfg in FX_CONTRACT.items():
+        path = f"us/{ticker}.csv"
+        rows = _fx_rows_read(path)
+        meta = prov.get(ticker, {"provisional_dates": [], "last_official": None})
+        provisional = set(meta.get("provisional_dates", []))
+        start = FX_CONTRACT_HISTORY_START if not rows else \
+            (date.fromisoformat(max(rows)) - timedelta(days=FX_OFFICIAL_LOOKBACK_DAYS)).isoformat()
+        official = {}
+        try:
+            official = _fetch_ecb_usd_per_eur(start) if cfg["official"] == "ecb" else _fetch_boc_usd_per_cad(start)
+        except Exception as e:  # noqa: BLE001
+            print(f"⚠⚠ {ticker}: 官方來源抓取失敗（{e}）——只做 yfinance 暫補，下次官方成功會覆蓋")
+        for d, v in official.items():
+            rows[d] = repr(float(v))
+            provisional.discard(d)
+        last_off = max([meta.get("last_official") or "1900-01-01"] + list(official))
+        # 規則 3：官方已走過但當天沒公布的暫補列 → 刪除
+        for d in sorted(provisional):
+            if d <= last_off and d not in official:
+                rows.pop(d, None)
+                provisional.discard(d)
+        # 規則 2：最後官方日期之後的近日暫補
+        try:
+            df = yf.download(ticker, period="1mo", auto_adjust=True, progress=False)
+            if df is not None and not df.empty:
+                close = df["Close"]
+                if hasattr(close, "columns"):
+                    close = close.iloc[:, 0]
+                for idx, v in close.items():
+                    d = idx.strftime("%Y-%m-%d")
+                    if d > last_off and d not in rows and not pd.isna(v) and float(v) > 0:
+                        rows[d] = repr(float(v))
+                        provisional.add(d)
+        except Exception as e:  # noqa: BLE001
+            print(f"⚠ {ticker}: yfinance 暫補失敗（{e}）")
+        if rows:
+            _fx_rows_write(path, ticker, rows)
+        prov[ticker] = {"official_source": cfg["official"], "last_official": None if last_off == "1900-01-01" else last_off,
+                        "provisional_dates": sorted(provisional)}
+        print(f"Saved: {path}  (official {len(official)} 筆, last_official={prov[ticker]['last_official']}, "
+              f"provisional={prov[ticker]['provisional_dates']})")
+    with open(FX_PROVENANCE_PATH, "w") as f:
+        json.dump(prov, f, indent=1, sort_keys=True)
+
+
+if __name__ == "__main__":
+    for t in tickers_tw:
+        download_adj_close(t, "tw")
+    for t in tickers_us:
+        download_adj_close(t, "us")
+    update_twd_fx()
+    update_contract_fx()
