@@ -19,7 +19,6 @@ Per-ticker MaxDate lag to master max (days) [larger = more stale]:
 - DBMF: 0
 - DBMFE: 0
 - DTLA: 0
-- EURUSD=X: 0
 - GLD: 0
 - HGER: 0
 - IEF: 0
@@ -34,7 +33,8 @@ Per-ticker MaxDate lag to master max (days) [larger = more stale]:
 - XLE: 0
 - XLP: 0
 - XLV: 0
-- CADUSD=X: -1
+- EURUSD=X: -1
+- CADUSD=X: -2
 
 Top missing ratios in FULL matrix (often just late inception):
 - DBMFE: 94.583%
