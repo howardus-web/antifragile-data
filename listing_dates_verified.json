@@ -1,20 +1,20 @@
 {
- "checksum": "83cedd453249820a6fa730c3cd4c1298654518b17bd9ce7b857e593d7eb87d90",
+ "checksum": "d24f76d59452cb8f360c11e7fc09e808023e45ab257d385b77b70ad76cbe10f5",
  "conflicts": {
   "2482": {
    "cached": "2001-09-19",
-   "observed_at": "2026-11-08T00:32:51Z",
+   "observed_at": "2026-11-08T21:20:58Z",
    "official": "2001-09-17",
    "source": "twse_t187ap03_L"
   },
   "6133": {
    "cached": "2003-08-15",
-   "observed_at": "2026-11-08T00:32:51Z",
+   "observed_at": "2026-11-08T21:20:58Z",
    "official": "2003-08-25",
    "source": "twse_t187ap03_L"
   }
  },
- "generated_at": "2026-11-08T00:32:51Z",
+ "generated_at": "2026-11-08T21:20:58Z",
  "guard_version": "2.1",
  "listed_equities": {
   "1101": {
@@ -7489,14 +7489,14 @@
  "schema": "listing_guard_cache.v1",
  "sources": {
   "tpex_etf_filter": {
-   "retrieved_at": "2026-11-08T00:32:51Z",
+   "retrieved_at": "2026-11-08T21:20:58Z",
    "sha256": "443e381107e53a3540a42cb3c83f0a2527bfa7d04bbb1747cc30400dd78bd4c5",
    "url": "https://info.tpex.org.tw/api/etfFilter"
   },
   "twse_t187ap03_L": {
    "malformed_records": 0,
    "records": 1099,
-   "retrieved_at": "2026-11-08T00:32:51Z",
+   "retrieved_at": "2026-11-08T21:20:58Z",
    "sha256": "f8397da457f38725d827ddf712ec64a9e0ca962fb63d0ef18f1babc8295df2cc",
    "table_dates": [
     "1151107"
@@ -7504,7 +7504,7 @@
    "url": "https://openapi.twse.com.tw/v1/opendata/t187ap03_L"
   },
   "twse_t187ap47_L": {
-   "retrieved_at": "2026-11-08T00:32:51Z",
+   "retrieved_at": "2026-11-08T21:20:58Z",
    "sha256": "e03c12e2aaf42983fc1cbd0d65bafe8dd2558a1c35eac472647914085e6a44ca",
    "url": "https://openapi.twse.com.tw/v1/opendata/t187ap47_L"
   }
