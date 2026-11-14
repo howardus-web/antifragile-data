@@ -6,7 +6,7 @@ Trading days    : 6758
 Master min date : 2000-01-03
 Master max date : 2026-11-13
 Matrix shape    : 6758 x 24
-NaN cells (info): 67817
+NaN cells (info): 67797
 
 NOTE: NaN here is often normal (different start dates). Backtest layer should decide the valid common-start window.
 
@@ -14,7 +14,6 @@ Per-ticker MaxDate lag to master max (days) [larger = more stale]:
 - ALLW: 0
 - BRK-B: 0
 - BTAL: 0
-- CADUSD=X: 0
 - CSNDX: 0
 - CTA: 0
 - DBMF: 0
@@ -35,13 +34,14 @@ Per-ticker MaxDate lag to master max (days) [larger = more stale]:
 - XLE: 0
 - XLP: 0
 - XLV: 0
+- CADUSD=X: -1
 
 Top missing ratios in FULL matrix (often just late inception):
-- DBMFE: 94.303%
-- ALLW: 93.696%
-- CTA: 82.584%
-- HGER: 82.332%
+- DBMFE: 94.288%
+- ALLW: 93.682%
+- CTA: 82.569%
+- HGER: 82.317%
 - QBTL: 74.12%
-- DBMF: 72.018%
-- DTLA: 68.911%
+- DBMF: 72.004%
+- DTLA: 68.896%
 - CADUSD=X: 64.279%
