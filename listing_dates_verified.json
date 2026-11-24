@@ -1,20 +1,20 @@
 {
- "checksum": "2a30635d3dcff815ea5314c9a52bc3ff5d2a74bcc780556b0264debe286f911e",
+ "checksum": "44f5a361f6380a8e49f1b7772c90377e976fd483243cc1f0491c7e5b92683bc4",
  "conflicts": {
   "2482": {
    "cached": "2001-09-19",
-   "observed_at": "2026-11-23T21:21:14Z",
+   "observed_at": "2026-11-24T05:18:16Z",
    "official": "2001-09-17",
    "source": "twse_t187ap03_L"
   },
   "6133": {
    "cached": "2003-08-15",
-   "observed_at": "2026-11-23T21:21:14Z",
+   "observed_at": "2026-11-24T05:18:16Z",
    "official": "2003-08-25",
    "source": "twse_t187ap03_L"
   }
  },
- "generated_at": "2026-11-23T21:21:14Z",
+ "generated_at": "2026-11-24T05:18:16Z",
  "guard_version": "2.1",
  "listed_equities": {
   "1101": {
@@ -7516,23 +7516,23 @@
  "schema": "listing_guard_cache.v1",
  "sources": {
   "tpex_etf_filter": {
-   "retrieved_at": "2026-11-23T21:21:14Z",
-   "sha256": "e64a39e84c1ad27bed1a1edd8c567207721624e8cc3ac4f9e686572b16a27b10",
+   "retrieved_at": "2026-11-24T05:18:16Z",
+   "sha256": "a5a1d2069a691015af8c60ba82fd739bf95ba0a3120f2bd9c098e4dd004ff75f",
    "url": "https://info.tpex.org.tw/api/etfFilter"
   },
   "twse_t187ap03_L": {
    "malformed_records": 0,
    "records": 1098,
-   "retrieved_at": "2026-11-23T21:21:14Z",
-   "sha256": "f6bc100c07db7ce5bb078828bb7838a32770f64d30b8b8f7a2013adf2bfe989e",
+   "retrieved_at": "2026-11-24T05:18:16Z",
+   "sha256": "55a9d6900049856ecffde3c98840eb571ef570f42a1553bdd4cd145217c216cb",
    "table_dates": [
-    "1151122"
+    "1151123"
    ],
    "url": "https://openapi.twse.com.tw/v1/opendata/t187ap03_L"
   },
   "twse_t187ap47_L": {
-   "retrieved_at": "2026-11-23T21:21:14Z",
-   "sha256": "f5ace72c17ba20e66b245daa5d4eed143b599b1b1a800467c7f052f44a552da5",
+   "retrieved_at": "2026-11-24T05:18:16Z",
+   "sha256": "08f0909eb8ff8cbb295fcf5fd248e9c53e57ca5cd3efaacaf50c38b9b3f28d3e",
    "url": "https://openapi.twse.com.tw/v1/opendata/t187ap47_L"
   }
  }
