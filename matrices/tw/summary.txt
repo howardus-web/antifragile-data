@@ -2,11 +2,11 @@ Data Layer Summary (FULL matrix) — TW
 ================================
 
 Master calendar : 0050.TW
-Trading days    : 4379
+Trading days    : 4380
 Master min date : 2009-01-02
 Master max date : 2026-11-25
-Matrix shape    : 4379 x 150
-NaN cells (info): 112957
+Matrix shape    : 4380 x 150
+NaN cells (info): 113107
 
 NOTE: NaN here is often normal (different start dates). Backtest layer should decide the valid common-start window.
 
@@ -165,9 +165,9 @@ Per-ticker MaxDate lag to master max (days) [larger = more stale]:
 Top missing ratios in FULL matrix (often just late inception):
 - 2411.TW: 100.0%
 - 3009.TW: 98.858%
-- 7769.TW: 94.519%
-- 2350.TW: 91.87%
-- 2403.TW: 89.541%
-- 3367.TW: 84.517%
-- 6805.TW: 83.17%
-- 3697.TW: 82.781%
+- 7769.TW: 94.521%
+- 2350.TW: 91.872%
+- 2403.TW: 89.543%
+- 3367.TW: 84.521%
+- 6805.TW: 83.174%
+- 3697.TW: 82.785%
