@@ -1,20 +1,20 @@
 {
- "checksum": "ec446972a82dd254177743f0a39554b3481983eef1238525c78799d2652b6924",
+ "checksum": "7cd4dc9f866bcb9d48c62873e3627be2a68174d566960470cda2ff5874661296",
  "conflicts": {
   "2482": {
    "cached": "2001-09-19",
-   "observed_at": "2026-11-26T21:21:03Z",
+   "observed_at": "2026-11-27T03:37:23Z",
    "official": "2001-09-17",
    "source": "twse_t187ap03_L"
   },
   "6133": {
    "cached": "2003-08-15",
-   "observed_at": "2026-11-26T21:21:03Z",
+   "observed_at": "2026-11-27T03:37:23Z",
    "official": "2003-08-25",
    "source": "twse_t187ap03_L"
   }
  },
- "generated_at": "2026-11-26T21:21:03Z",
+ "generated_at": "2026-11-27T03:37:23Z",
  "guard_version": "2.1",
  "listed_equities": {
   "1101": {
@@ -7344,6 +7344,16 @@
    "class": "TWSE_LISTED_FUND",
    "src": "twse_t187ap47_L"
   },
+  "009834": {
+   "at": "2026-11-27T03:37:23Z",
+   "class": "TWSE_LISTED_FUND",
+   "src": "twse_t187ap47_L"
+  },
+  "009835": {
+   "at": "2026-11-27T03:37:23Z",
+   "class": "TWSE_LISTED_FUND",
+   "src": "twse_t187ap47_L"
+  },
   "00983A": {
    "at": "2026-10-17T04:56:01Z",
    "class": "TWSE_LISTED_FUND",
@@ -7516,23 +7526,23 @@
  "schema": "listing_guard_cache.v1",
  "sources": {
   "tpex_etf_filter": {
-   "retrieved_at": "2026-11-26T21:21:03Z",
-   "sha256": "84a5a6a9e70502f649115059108c06ca079306b4cc1b6fdb8c05cf390a5dfe7d",
+   "retrieved_at": "2026-11-27T03:37:23Z",
+   "sha256": "5a9a4275cf51211a458b4597cb9806c84aad33f7d05677cc45e358cb5e047fb4",
    "url": "https://info.tpex.org.tw/api/etfFilter"
   },
   "twse_t187ap03_L": {
    "malformed_records": 0,
    "records": 1098,
-   "retrieved_at": "2026-11-26T21:21:03Z",
-   "sha256": "933004055d6d7995e459dfec6b5bab51b5e58b86ae0ab99e7c1f2cb36dd42915",
+   "retrieved_at": "2026-11-27T03:37:23Z",
+   "sha256": "8c545a3f8555ffc7a2bc0a66f9bd78c913491edd3a24ddf54a9165c8ec12db7e",
    "table_dates": [
-    "1151125"
+    "1151126"
    ],
    "url": "https://openapi.twse.com.tw/v1/opendata/t187ap03_L"
   },
   "twse_t187ap47_L": {
-   "retrieved_at": "2026-11-26T21:21:03Z",
-   "sha256": "7baec8b7622884c48e60ad792cced7ddb86b8abb5e21b050a0736f9556053213",
+   "retrieved_at": "2026-11-27T03:37:23Z",
+   "sha256": "36b61eae8dd3d52bcb142f4210ae297f444e0ad928ea2619df774608c8f436db",
    "url": "https://openapi.twse.com.tw/v1/opendata/t187ap47_L"
   }
  }
